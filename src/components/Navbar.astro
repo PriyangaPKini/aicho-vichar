@@ -1,6 +1,8 @@
 ---
 const { currentPath = "" } = Astro.props;
 const isHome = currentPath === "/" || currentPath === "";
+const isBlog = currentPath === "/blog" || currentPath === "/blog/" || currentPath.startsWith("/blog/");
+const isAbout = currentPath === "/about" || currentPath === "/about/";
 ---
 
 {!isHome && (
@@ -11,6 +13,12 @@ const isHome = currentPath === "/" || currentPath === "";
           <use href="#icon-home" />
         </svg>
       </a>
+      {!isBlog && (
+        <a href="/blog" class="navbar-link">Blogs</a>
+      )}
+      {!isAbout && (
+        <a href="/about" class="navbar-link">About</a>
+      )}
     </div>
   </nav>
 )}

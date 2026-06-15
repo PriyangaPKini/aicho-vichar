@@ -9,9 +9,10 @@ const posts = (await getCollection('blog'))
 ---
 
 <BaseLayout title="All Posts — Priyanga P Kini">
-  <h1 class="page-title">All Posts</h1>
-  <Search />
-
+<section class="intro">
+  <h1 class="page-title">All <em>Vichars<em/></h1>
+<section/>
+<Search />
   {posts.length === 0 ? (
     <p style="color: var(--text-muted);">No posts yet. Stay tuned.</p>
   ) : (

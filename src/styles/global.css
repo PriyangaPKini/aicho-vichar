@@ -10,29 +10,16 @@
   --gold: #d49423;
   --border: #d8ccb4;
   --card-bg: #f5efe1;
-  --pastel-sage: #e8f0e0;
-  --pastel-lavender: #ede4f5;
-  --pastel-peach: #fce8dc;
-  --pastel-mint: #ddf0ec;
-  --pastel-sky: #e0ecf8;
-  --color-sage: #4a7c3f;
-  --color-lavender: #7b5ea7;
-  --color-peach: #c4693c;
-  --color-mint: #3a7a6e;
-  --color-sky: #3d6b99;
   --font-heading: 'Fraunces', 'Lora', Georgia, serif;
   --font-body: 'Inter', sans-serif;
   --navbar-height: 60px;
   --accent-light-bg: rgba(212, 148, 35, 0.1);
   --accent-light-bg-lighter: rgba(212, 148, 35, 0.06);
   --icon-sm: 20px;
-  --icon-md: 24px;
   --transition-duration: 0.15s;
-  --transition-duration-slow: 0.3s;
   --border-radius-sm: 3px;
   --border-radius-md: 6px;
   --border-radius-lg: 8px;
-  --border-radius-xl: 10px;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -89,6 +76,21 @@ body {
   background: var(--accent-light-bg);
 }
 
+.navbar-link {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text);
+  text-decoration: none;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  transition: background-color var(--transition-duration);
+}
+
+.navbar-link:hover {
+  background: var(--accent-light-bg);
+}
+
 .navbar-brand svg {
   width: 20px;
   height: 20px;
@@ -117,41 +119,6 @@ body {
 .navbar-social-link svg {
   width: var(--icon-sm);
   height: var(--icon-sm);
-}
-
-.navbar-avatar-wrap {
-  position: relative;
-}
-
-.navbar-avatar {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: var(--gold);
-  color: #fff;
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-body);
-  font-size: 0.8rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  cursor: pointer;
-  padding: 0;
-}
-
-.navbar-avatar-menu {
-  position: absolute;
-  top: 36px;
-  right: 0;
-  min-width: 180px;
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  box-shadow: 0 12px 30px rgba(26, 26, 26, 0.12);
-  padding: 0.5rem;
-  z-index: 200;
 }
 
 
@@ -220,12 +187,13 @@ body {
 
 .intro h1 {
   font-family: var(--font-heading);
-  font-size: 4rem;
+  font-size: clamp(2rem, 5.5vw, 3.4rem);
   font-weight: 600;
   font-variation-settings: "opsz" 144, "SOFT" 50;
   letter-spacing: -0.02em;
   margin-bottom: 1.5rem;
-  line-height: 1.05;
+  line-height: 1.25;
+  white-space: nowrap;
 }
 
 .intro h1 em,
@@ -300,6 +268,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 0.75rem;
 }
 
 .section-title a {
@@ -389,66 +358,8 @@ body {
   border-radius: var(--border-radius-sm);
 }
 
-.tag-sage,
-.tag-lavender,
-.tag-peach,
-.tag-mint,
-.tag-sky,
 .tag-neutral { background: var(--navbar-bg); color: var(--text-muted); border: 1px solid var(--border); }
 
-/* ── Newsletter ── */
-.newsletter {
-  background: var(--navbar-bg);
-  border: 1px solid var(--border);
-  border-radius: var(--border-radius-xl);
-  padding: 2rem;
-}
-
-.newsletter h3 {
-  font-family: var(--font-heading);
-  font-size: 1.05rem;
-  margin-bottom: 0.4rem;
-}
-
-.newsletter p {
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  margin-bottom: 1.25rem;
-}
-
-.newsletter-form {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.newsletter-form input {
-  flex: 1;
-  padding: 0.55rem 0.75rem;
-  border: 1px solid var(--border);
-  border-radius: var(--border-radius-md);
-  font-family: var(--font-body);
-  font-size: 0.85rem;
-  background: var(--card-bg);
-  outline: none;
-  transition: border-color 0.15s;
-}
-
-.newsletter-form input:focus { border-color: var(--accent); }
-
-.newsletter-form button {
-  padding: 0.55rem 1.25rem;
-  background: var(--accent);
-  color: white;
-  border: none;
-  border-radius: var(--border-radius-md);
-  font-family: var(--font-body);
-  font-size: 0.85rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background 0.15s;
-}
-
-.newsletter-form button:hover { background: var(--accent-hover); }
 
 /* ── Prose (blog/book posts) ── */
 .prose h1, .prose h2, .prose h3 {
@@ -823,8 +734,7 @@ body {
   margin-top: 1.5rem;
 }
 
-.comments-composer-wrap[hidden],
-.navbar-avatar-wrap[hidden] {
+.comments-composer-wrap[hidden] {
   display: none;
 }
 
@@ -1172,10 +1082,83 @@ body {
   text-decoration: underline;
 }
 
+/* ── Cover carousel ── */
+.cover {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: 12px;
+  margin-bottom: 2.5rem;
+  background: var(--navbar-bg);
+}
+
+.cover-slide {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  transition: opacity 0.7s ease;
+  pointer-events: none;
+}
+
+.cover-slide.is-active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.cover-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+  display: block;
+}
+
+.cover-slide figcaption {
+  position: absolute;
+  left: 1rem;
+  bottom: 1rem;
+  padding: 0.4rem 0.8rem;
+  background: rgba(26, 26, 26, 0.55);
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  border-radius: 999px;
+  backdrop-filter: blur(4px);
+}
+
+.cover-dots {
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+  display: flex;
+  gap: 0.4rem;
+}
+
+.cover-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: background-color var(--transition-duration);
+}
+
+.cover-dot.is-active {
+  background: #fff;
+}
+
+@media (max-width: 600px) {
+  .cover { aspect-ratio: 16 / 9; }
+}
+
 /* ── Site footer ── */
 .site-footer {
-  margin-top: 4rem;
-  padding: 2.5rem 1.5rem 2rem;
+  margin-top: 1.5rem;
+  padding: 2rem 1.5rem 1.5rem;
   background: var(--navbar-bg);
   border-top: 1px solid var(--border);
   font-family: var(--font-body);
@@ -1229,8 +1212,9 @@ body {
 
 .site-footer-right {
   display: flex;
-  align-items: center;
-  gap: 0.75rem;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
 }
 
 .site-footer-socials {
@@ -1258,10 +1242,11 @@ body {
 }
 
 .site-footer-copy {
-  max-width: 720px;
-  margin: 0.75rem auto 0;
+  margin: 0;
   font-size: 0.78rem;
   text-align: center;
+  align-self: center;
+  flex: 1;
 }
 
 /* ── Post Navigation ── */

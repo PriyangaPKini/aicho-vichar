@@ -2,12 +2,42 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="About — Priyanga P Kini" description="About Priyanga P Kini — software engineer, reader, writer.">
-  <article class="prose">
-    <h1 class="page-title">Who I am</h1>
-    <p>
-      I'm Priyanga — an engineer at <a href="https://nilenso.com" target="_blank" rel="noopener noreferrer">nilenso</a>. I spend my days thinking about why we're building what we're building, and shaping how it lands for the people who'll use it.
-    </p>
+<BaseLayout title="About — Priyanga P Kini" description="About Priyanga P Kini.">
+  <section class="cover" data-cover>
+    <figure class="cover-slide is-active">
+      <img src="/gallery/fifth-elephant-pune-2026.jpg" alt="The Fifth Elephant, Pune 2026 group photo" />
+      <figcaption>The Fifth Elephant, Pune 2026</figcaption>
+    </figure>
+    <figure class="cover-slide">
+      <img src="/gallery/in-clojure-2024.jpg" alt="IN/Clojure 2024 Bengaluru group photo" />
+      <figcaption>IN/Clojure 2024, Bengaluru</figcaption>
+    </figure>
+    <figure class="cover-slide">
+      <img src="/gallery/clojure-bridge-2024.jpg" alt="ClojureBridge 2024 group photo" />
+      <figcaption>ClojureBridge 2024</figcaption>
+    </figure>
+    <figure class="cover-slide">
+      <img src="/gallery/punjab-healthcare-field-visit.jpg" alt="Field visit to a healthcare centre in Punjab" />
+      <figcaption>Field visit to healthcare centres in Punjab, 2022</figcaption>
+    </figure>
+    <figure class="cover-slide">
+      <img src="/gallery/angelhack-kochi-2018.jpg" alt="AngelHack Kochi 2018 winners" />
+      <figcaption>AngelHack Kochi 2018</figcaption>
+    </figure>
+    <figure class="cover-slide">
+      <img src="/gallery/nilenso-offsite-board-games.jpg" alt="Board games at a nilenso offsite" />
+      <figcaption>Board games at a nilenso offsite</figcaption>
+    </figure>
+    <div class="cover-dots" data-cover-dots></div>
+  </section>
+
+  <section class="intro">
+    <h1 class="page-title">Priyanga <em>Kini</em></h1>
+    <p>I build and consult on software for a living.</p>
+    <p>I'm a member of <a href="https://nilenso.com" target="_blank" rel="noopener noreferrer" style="color: var(--gold);">nilenso</a>, an employee-owned software co-op, so the job sits across engineering, consulting, and helping run the place.</p>
+  </section>
+
+  <section class="prose">
     <h2>Get in touch</h2>
     <p>
       Find me on
@@ -15,5 +45,41 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <a href="https://linkedin.com/in/priyangapkini" target="_blank" rel="noopener noreferrer">LinkedIn</a>,
       or write to me at <a href="mailto:priyangapkini99@gmail.com">priyangapkini99@gmail.com</a>.
     </p>
-  </article>
+  </section>
 </BaseLayout>
+
+<script>
+  const cover = document.querySelector('[data-cover]');
+  if (cover) {
+    const slides = Array.from(cover.querySelectorAll('.cover-slide')) as HTMLElement[];
+    const dotsWrap = cover.querySelector('[data-cover-dots]') as HTMLElement;
+    let index = 0;
+    let timer: number | undefined;
+
+    slides.forEach((_, i) => {
+      const dot = document.createElement('button');
+      dot.type = 'button';
+      dot.className = 'cover-dot' + (i === 0 ? ' is-active' : '');
+      dot.setAttribute('aria-label', `Slide ${i + 1}`);
+      dot.addEventListener('click', () => show(i, true));
+      dotsWrap.appendChild(dot);
+    });
+
+    function show(next: number, manual = false) {
+      slides[index].classList.remove('is-active');
+      dotsWrap.children[index].classList.remove('is-active');
+      index = (next + slides.length) % slides.length;
+      slides[index].classList.add('is-active');
+      dotsWrap.children[index].classList.add('is-active');
+      if (manual) restart();
+    }
+
+    function tick() { show(index + 1); }
+    function restart() {
+      if (timer) window.clearInterval(timer);
+      timer = window.setInterval(tick, 4500);
+    }
+    restart();
+  }
+</script>
+
