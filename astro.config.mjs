@@ -3,7 +3,7 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://magale-vicharu.netlify.app',
+  site: 'https://aiche-vichar.netlify.app',
   output: 'static',
   integrations: [sitemap()],
 });

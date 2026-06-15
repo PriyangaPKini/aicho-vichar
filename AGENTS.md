@@ -2,13 +2,13 @@
 
 Guidance for AI agents (and humans) working in this repo. Read this before making changes.
 
-For cross-project conventions, see `~/.claude/rules/` (`contributing.md`, `coding-principles.md`). This file documents only what is **specific to magale-vicharu**.
+For cross-project conventions, see `~/.claude/rules/` (`contributing.md`, `coding-principles.md`). This file documents only what is **specific to aiche-vichar**.
 
 ---
 
 ## What this is
 
-`magale-vicharu` is a personal site — a space to put my thoughts down. Static Astro site, deployed to Netlify at <https://magale-vicharu.netlify.app/>.
+`aiche-vichar` is a personal site — a space to put my thoughts down. Static Astro site, deployed to Netlify at <https://aiche-vichar.netlify.app/>.
 
 ## Stack
 
@@ -108,5 +108,5 @@ npm run astro …      # raw Astro CLI (e.g. `astro check`)
 
 ## Things to watch
 
-- The `site:` URL in `astro.config.mjs` (`https://magale-vicharu.netlify.app`) drives the sitemap. Update it if a custom domain goes live.
+- The `site:` URL in `astro.config.mjs` (`https://aiche-vichar.netlify.app`) drives the sitemap. Update it if a custom domain goes live.
 - Cmd+K search is built at runtime against `fuse.js` over the blog collection. Keep `description` populated for better hit quality.
