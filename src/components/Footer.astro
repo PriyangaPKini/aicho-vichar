@@ -1,23 +1,35 @@
 ---
 import IconLink from "./IconLink.astro";
 import { SOCIAL_ITEMS } from "../constants";
+
+const year = new Date().getFullYear();
 ---
 
-<footer class="footer">
-  <div class="footer-container">
-    <div class="footer-social">
-      {SOCIAL_ITEMS.map((item) => (
-        <IconLink
-          href={item.href}
-          icon={item.icon}
-          label={item.label}
-          color={item.color}
-          className="social-link"
-          size={20}
-          target="_blank"
-          rel="noopener noreferrer"
-        />
-      ))}
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <p class="site-footer-brand">
+      <span class="site-footer-title">Aiche <em>Vichar</em></span>
+      <span class="site-footer-tagline">today's thought · a small journal</span>
+    </p>
+    <div class="site-footer-right">
+      <nav class="site-footer-nav" aria-label="Footer">
+        <a href="/about">About</a>
+      </nav>
+      <div class="site-footer-socials">
+        {SOCIAL_ITEMS.map((item) => (
+          <IconLink
+            href={item.href}
+            icon={item.icon}
+            label={item.label}
+            color={item.color}
+            className="site-footer-social-link"
+            size={20}
+            target="_blank"
+            rel="noopener noreferrer"
+          />
+        ))}
+      </div>
     </div>
   </div>
+  <p class="site-footer-copy">© {year} Priyanga P Kini</p>
 </footer>

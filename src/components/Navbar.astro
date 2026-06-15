@@ -1,31 +1,17 @@
 ---
-import IconLink from "./IconLink.astro";
-import { SOCIAL_ITEMS } from "../constants";
+const { currentPath = "" } = Astro.props;
+const isHome = currentPath === "/" || currentPath === "";
 ---
 
-<nav class="navbar">
-  <div class="navbar-container">
-    <a href="/" class="navbar-brand" title="Home">
-      <svg width="20" height="20" style="color: var(--color-sage);">
-        <use href="#icon-home" />
-      </svg>
-    </a>
-
-    <div class="navbar-socials">
-      {SOCIAL_ITEMS.map((item) => (
-        <IconLink
-          href={item.href}
-          icon={item.icon}
-          label={item.label}
-          color={item.color}
-          className="navbar-social-link"
-          size={20}
-          target="_blank"
-          rel="noopener noreferrer"
-        />
-      ))}
+{!isHome && (
+  <nav class="navbar">
+    <div class="navbar-container">
+      <a href="/" class="navbar-brand" title="Home">
+        <svg width="20" height="20" style="color: var(--text);">
+          <use href="#icon-home" />
+        </svg>
+      </a>
     </div>
-
-  </div>
-</nav>
+  </nav>
+)}
 

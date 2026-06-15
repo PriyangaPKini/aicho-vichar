@@ -1,7 +1,7 @@
 ---
 import Icons from '../components/Icons.astro';
 import Navbar from '../components/Navbar.astro';
-import Search from '../components/Search.astro';
+import Footer from '../components/Footer.astro';
 import '../styles/global.css';
 
 const { title = "Priyanga P Kini", description = "Software engineer, reader, writer." } = Astro.props;
@@ -22,8 +22,8 @@ const currentPath = Astro.url.pathname;
   <Icons />
   <Navbar currentPath={currentPath} />
   <main class="main">
-    <Search />
     <slot />
   </main>
+  <Footer />
 </body>
 </html>
