@@ -1,4 +1,4 @@
-# magale-vicharu
+# aiche-vichar
 
 A space to put my thoughts down.
 
