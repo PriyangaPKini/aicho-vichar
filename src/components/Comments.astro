@@ -1,0 +1,306 @@
+---
+interface Props {
+  postSlug: string;
+}
+const { postSlug } = Astro.props;
+---
+
+<section class="comments-cta" data-comments data-post-slug={postSlug}>
+  <header class="comments-cta-header">
+    <h2>Comments</h2>
+    <span data-comments-count>0 comments</span>
+  </header>
+
+  <div class="comments-cta-body" data-comments-anon>
+    <h3>Start the conversation</h3>
+    <button class="comments-cta-signup" type="button" data-open-signup>Sign up</button>
+    <p class="comments-cta-signin">Already a member? <a href="#" data-open-signin>Sign in</a></p>
+  </div>
+
+  <div class="comments-composer-wrap" data-comments-composer hidden>
+    <div class="comments-avatar-wrap">
+      <button
+        type="button"
+        class="comments-avatar"
+        data-comments-avatar
+        aria-label="Account menu"
+      >?</button>
+      <div class="comments-avatar-menu" data-comments-menu hidden>
+        <p class="comments-avatar-menu-name"><span data-comments-user></span></p>
+        <button type="button" class="comments-avatar-menu-item" data-comments-signout>Sign out</button>
+      </div>
+    </div>
+    <div class="comments-composer-main">
+      <p class="comments-composer-name" data-comments-user></p>
+      <form class="comments-composer-card" data-comments-form>
+        <textarea
+          data-comments-input
+          placeholder="Add a comment…"
+          rows="1"
+          required
+        ></textarea>
+        <div class="comments-composer-bar">
+          <p class="signin-error" data-comments-error></p>
+          <button type="submit" class="comments-submit" disabled>Post</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <ul class="comments-list" data-comments-list></ul>
+</section>
+
+<script>
+  import {
+    onUserChange,
+    addComment,
+    subscribeToComments,
+    signOut,
+    type Comment,
+  } from '../lib/firebase';
+
+  const root = document.querySelector('[data-comments]') as HTMLElement | null;
+  if (root) {
+    const postSlug = root.dataset.postSlug ?? '';
+    const list = root.querySelector('[data-comments-list]') as HTMLUListElement;
+    const count = root.querySelector('[data-comments-count]') as HTMLElement;
+    const anon = root.querySelector('[data-comments-anon]') as HTMLElement;
+    const composer = root.querySelector('[data-comments-composer]') as HTMLElement;
+    const menu = root.querySelector('[data-comments-menu]') as HTMLElement;
+    const form = root.querySelector('[data-comments-form]') as HTMLFormElement;
+    const input = root.querySelector('[data-comments-input]') as HTMLTextAreaElement;
+    const submitBtn = root.querySelector('.comments-submit') as HTMLButtonElement;
+    const avatar = root.querySelector('[data-comments-avatar]') as HTMLElement;
+    const errorEl = root.querySelector('[data-comments-error]') as HTMLElement;
+    const userLabels = root.querySelectorAll('[data-comments-user]');
+    const signoutBtn = root.querySelector('[data-comments-signout]') as HTMLButtonElement;
+
+    let currentUserId: string | null = null;
+    let currentUserName: string = '';
+
+    function formatDate(c: Comment): string {
+      return c.createdAt?.toDate?.().toLocaleDateString('en-US', {
+        year: 'numeric', month: 'short', day: 'numeric',
+      }) ?? '';
+    }
+
+    function renderNode(c: Comment, byParent: Map<string | null, Comment[]>): string {
+      const initial = (c.userName.trim()[0] || '?').toUpperCase();
+      const children = byParent.get(c.id) || [];
+      const replyControl = currentUserId
+        ? `<button type="button" class="comments-reply-btn" data-reply-id="${c.id}">Reply</button>`
+        : '';
+
+      let nestedHtml = '';
+      if (children.length > 1) {
+        const previous = children.slice(0, -1).map((child) => renderNode(child, byParent)).join('');
+        const last = renderNode(children[children.length - 1], byParent);
+        const hiddenCount = children.length - 1;
+        const expandLabel = hiddenCount === 1 ? 'See previous reply' : `See ${hiddenCount} previous replies`;
+        nestedHtml = `
+          <div class="comments-thread" data-thread="${c.id}">
+            <button type="button" class="comments-thread-toggle" data-thread-expand="${c.id}">${expandLabel}</button>
+            <ul class="comments-children comments-thread-prev" data-thread-prev="${c.id}">${previous}</ul>
+            <ul class="comments-children">${last}</ul>
+            <button type="button" class="comments-thread-toggle comments-thread-collapse" data-thread-collapse="${c.id}">Collapse replies</button>
+          </div>
+        `;
+      } else if (children.length === 1) {
+        nestedHtml = `<ul class="comments-children">${renderNode(children[0], byParent)}</ul>`;
+      }
+
+      return `
+        <li class="comments-item">
+          <div class="comments-item-row">
+            <div class="comments-item-avatar">${escapeHtml(initial)}</div>
+            <div class="comments-item-body">
+              <div class="comments-item-meta">
+                <span class="comments-item-author">${escapeHtml(c.userName)}</span>
+                <span class="comments-item-date">${formatDate(c)}</span>
+              </div>
+              <p class="comments-item-text">${escapeHtml(c.text)}</p>
+            </div>
+          </div>
+          <div class="comments-item-actions">${replyControl}</div>
+          <div class="comments-reply-slot" data-reply-slot="${c.id}"></div>
+          ${nestedHtml}
+        </li>
+      `;
+    }
+
+    function countTree(nodes: Comment[], byParent: Map<string | null, Comment[]>): number {
+      let n = 0;
+      for (const node of nodes) {
+        n += 1 + countTree(byParent.get(node.id) || [], byParent);
+      }
+      return n;
+    }
+
+    function renderComments(comments: Comment[]) {
+      const byParent = new Map<string | null, Comment[]>();
+      comments.forEach((c) => {
+        const key = c.parentId ?? null;
+        if (!byParent.has(key)) byParent.set(key, []);
+        byParent.get(key)!.push(c);
+      });
+      const roots = byParent.get(null) || [];
+      const visible = countTree(roots, byParent);
+      count.textContent = `${visible} ${visible === 1 ? 'comment' : 'comments'}`;
+      list.innerHTML = roots.map((c) => renderNode(c, byParent)).join('');
+    }
+
+    function openReplyForm(parentId: string) {
+      const slot = list.querySelector<HTMLElement>(`[data-reply-slot="${parentId}"]`);
+      if (!slot || slot.querySelector('form')) return;
+      const nameLabel = currentUserName ? `<p class="comments-composer-name">${escapeHtml(currentUserName)}</p>` : '';
+      slot.innerHTML = `
+        ${nameLabel}
+        <form class="comments-reply-form" data-reply-form="${parentId}">
+          <textarea data-reply-input placeholder="Write a reply…" rows="2" required></textarea>
+          <div class="comments-reply-actions">
+            <button type="button" class="comments-reply-cancel" data-reply-cancel="${parentId}">Cancel</button>
+            <button type="submit" class="comments-submit" disabled>Reply</button>
+          </div>
+        </form>
+      `;
+      const replyInput = slot.querySelector('textarea') as HTMLTextAreaElement;
+      const replySubmit = slot.querySelector('button[type="submit"]') as HTMLButtonElement;
+      replyInput.focus();
+      replyInput.addEventListener('input', () => {
+        replySubmit.disabled = replyInput.value.trim().length === 0;
+      });
+    }
+
+    function closeReplyForm(parentId: string) {
+      const slot = list.querySelector<HTMLElement>(`[data-reply-slot="${parentId}"]`);
+      if (slot) slot.innerHTML = '';
+    }
+
+    list.addEventListener('click', async (e) => {
+      const target = e.target as HTMLElement;
+      const replyBtn = target.closest<HTMLElement>('[data-reply-id]');
+      if (replyBtn) {
+        openReplyForm(replyBtn.dataset.replyId!);
+        return;
+      }
+      const cancelBtn = target.closest<HTMLElement>('[data-reply-cancel]');
+      if (cancelBtn) {
+        closeReplyForm(cancelBtn.dataset.replyCancel!);
+        return;
+      }
+      const expandBtn = target.closest<HTMLElement>('[data-thread-expand]');
+      if (expandBtn) {
+        const thread = list.querySelector<HTMLElement>(`[data-thread="${expandBtn.dataset.threadExpand}"]`);
+        thread?.classList.add('comments-thread-expanded');
+        return;
+      }
+      const collapseBtn = target.closest<HTMLElement>('[data-thread-collapse]');
+      if (collapseBtn) {
+        const thread = list.querySelector<HTMLElement>(`[data-thread="${collapseBtn.dataset.threadCollapse}"]`);
+        thread?.classList.remove('comments-thread-expanded');
+      }
+    });
+
+    list.addEventListener('submit', async (e) => {
+      const form = (e.target as HTMLElement).closest<HTMLFormElement>('[data-reply-form]');
+      if (!form) return;
+      e.preventDefault();
+      const parentId = form.dataset.replyForm!;
+      const replyInput = form.querySelector('textarea') as HTMLTextAreaElement;
+      const text = replyInput.value;
+      try {
+        await addComment(postSlug, text, parentId);
+        closeReplyForm(parentId);
+      } catch (err) {
+        const error = (err as Error)?.message ?? 'Could not post reply.';
+        let errEl = form.querySelector('.signin-error') as HTMLElement | null;
+        if (!errEl) {
+          errEl = document.createElement('p');
+          errEl.className = 'signin-error';
+          form.appendChild(errEl);
+        }
+        errEl.textContent = error;
+      }
+    });
+
+    function escapeHtml(s: string): string {
+      return s
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    let latestComments: Comment[] = [];
+
+    onUserChange((user) => {
+      currentUserId = user?.uid ?? null;
+      currentUserName = user?.displayName || user?.email || '';
+      if (user) {
+        anon.hidden = true;
+        composer.hidden = false;
+        const label = currentUserName || 'You';
+        userLabels.forEach((el) => { el.textContent = label; });
+        avatar.textContent = (label.trim()[0] || '?').toUpperCase();
+      } else {
+        anon.hidden = false;
+        composer.hidden = true;
+        menu.hidden = true;
+      }
+      renderComments(latestComments);
+    });
+
+    avatar.addEventListener('click', (e) => {
+      e.stopPropagation();
+      menu.hidden = !menu.hidden;
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!menu.hidden && !menu.contains(e.target as Node) && e.target !== avatar) {
+        menu.hidden = true;
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !menu.hidden) menu.hidden = true;
+    });
+
+    input.addEventListener('input', () => {
+      submitBtn.disabled = input.value.trim().length === 0;
+    });
+
+    subscribeToComments(
+      postSlug,
+      (comments) => {
+        latestComments = comments;
+        renderComments(comments);
+      },
+      (err) => {
+        list.innerHTML = `<li class="comments-error">Could not load comments: ${escapeHtml(err.message)}</li>`;
+      },
+    );
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorEl.textContent = '';
+      const text = input.value;
+      try {
+        await addComment(postSlug, text);
+        input.value = '';
+        submitBtn.disabled = true;
+      } catch (err) {
+        errorEl.textContent = (err as Error)?.message ?? 'Could not post comment.';
+      }
+    });
+
+    signoutBtn.addEventListener('click', async () => {
+      menu.hidden = true;
+      try {
+        await signOut();
+      } catch (err) {
+        errorEl.textContent = (err as Error)?.message ?? 'Sign-out failed.';
+      }
+    });
+  }
+</script>
