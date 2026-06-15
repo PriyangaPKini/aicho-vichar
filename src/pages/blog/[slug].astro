@@ -1,5 +1,8 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import SignInModal from '../../components/SignInModal.astro';
+import SignUpModal from '../../components/SignUpModal.astro';
+import Comments from '../../components/Comments.astro';
 import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -22,10 +25,24 @@ if (post.data.externalUrl) {
   return Astro.redirect(post.data.externalUrl);
 }
 
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
+const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
 ---
 
 <BaseLayout title={`${post.data.title} — Priyanga P Kini`} description={post.data.description}>
+  {toc.length > 0 && (
+    <aside class="toc" aria-label="Table of contents">
+      <p class="toc-label">On this page</p>
+      <ul>
+        {toc.map((h) => (
+          <li class={`toc-${h.depth}`}>
+            <a href={`#${h.slug}`}>{h.text}</a>
+          </li>
+        ))}
+      </ul>
+    </aside>
+  )}
+
   <article class="prose">
     <h1 class="page-title">{post.data.title}</h1>
     <p class="post-item-date" style="margin-bottom: 2rem;">
@@ -33,6 +50,11 @@ const { Content } = await render(post);
     </p>
     <Content />
   </article>
+
+  <Comments postSlug={post.id} />
+
+  <SignInModal />
+  <SignUpModal />
 
   <nav class="post-navigation">
     <div class="nav-prev">
