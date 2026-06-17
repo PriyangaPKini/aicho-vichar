@@ -33,7 +33,7 @@ const { head, em } = splitTitleEmphasis(post.data.title, post.data.titleEmphasis
 
 <BaseLayout title={`${post.data.title} — Priyanga P Kini`} description={post.data.description}>
   {toc.length > 0 && (
-    <aside class="toc" aria-label="Table of contents">
+    <aside class="toc" data-toc aria-label="Table of contents">
       <p class="toc-label">On this page</p>
       <ul>
         {toc.map((h) => (
@@ -52,7 +52,7 @@ const { head, em } = splitTitleEmphasis(post.data.title, post.data.titleEmphasis
     </p>
   </section>
 
-  <article class="prose">
+  <article class="prose" data-blog-content>
     <Content />
     {canonicalUrl && (
       <p class="post-canonical">
@@ -86,3 +86,21 @@ const { head, em } = splitTitleEmphasis(post.data.title, post.data.titleEmphasis
     </div>
   </nav>
 </BaseLayout>
+
+<script>
+  const toc = document.querySelector<HTMLElement>('[data-toc]');
+  const blogContent = document.querySelector<HTMLElement>('[data-blog-content]');
+
+  if (toc && blogContent) {
+    const updateTocVisibility = () => {
+      const contentRect = blogContent.getBoundingClientRect();
+      const tocRect = toc.getBoundingClientRect();
+      const isReadingContent = contentRect.top < window.innerHeight && contentRect.bottom > tocRect.top;
+      toc.classList.toggle('is-hidden', !isReadingContent);
+    };
+
+    updateTocVisibility();
+    window.addEventListener('scroll', updateTocVisibility, { passive: true });
+    window.addEventListener('resize', updateTocVisibility);
+  }
+</script>

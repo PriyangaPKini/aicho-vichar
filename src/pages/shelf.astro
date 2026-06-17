@@ -1,0 +1,56 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Search from '../components/Search.astro';
+import { shelf, SHELF_GROUPS } from '../data/shelf';
+import { POST_COLORS } from '../constants';
+
+const tagLabel = (type: string) =>
+  SHELF_GROUPS.find((g) => g.type === type)?.label.replace(/s$/, '') ?? type;
+
+const searchItems = shelf.map((item) => ({
+  title: item.title,
+  body: [item.note, item.creator, item.sourceName, tagLabel(item.type)].filter(Boolean).join(' '),
+  tags: [tagLabel(item.type), item.creator, item.sourceName].filter(Boolean),
+  date: item.date,
+  href: item.url,
+  external: true,
+}));
+---
+
+<BaseLayout title="Shelf — Priyanga P Kini" description="Books, talks, articles, and podcasts I keep recommending.">
+  <section class="intro intro-shelf">
+    <h1 class="page-title">The <em>Shelf</em></h1>
+    <p>Books, talks, articles, and podcasts I keep coming back to.</p>
+  </section>
+
+  <Search
+    items={searchItems}
+    label="Shelf"
+    placeholder="Search shelf..."
+    triggerText="Search shelf…"
+  />
+
+  <ul class="post-list">
+    {shelf.map((item, i) => (
+      <li class="post-item">
+        <div class="post-item-left">
+          {item.date && (
+            <span class="shelf-item-date">
+              {new Date(item.date).toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })}
+            </span>
+          )}
+          <div class="shelf-item-text">
+            <span class="tag">
+              {tagLabel(item.type)} · {item.creator} · {item.sourceName}
+            </span>
+            <a class="post-item-title" href={item.url} target="_blank" rel="noopener noreferrer">
+              {item.title}
+              <svg class="external-icon" width="12" height="12"><use href="#icon-external" /></svg>
+            </a>
+            {item.note && <p class="shelf-item-subtitle">{item.note}</p>}
+          </div>
+        </div>
+      </li>
+    ))}
+  </ul>
+</BaseLayout>

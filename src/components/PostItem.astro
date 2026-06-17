@@ -1,28 +1,47 @@
 ---
-import { POST_COLORS, TAG_CLASSES } from "../constants";
+import { POST_COLORS } from "../constants";
 
 interface Props {
   post: any;
   index: number;
+  variant?: "compact" | "detailed";
 }
 
-const { post, index } = Astro.props;
+const { post, index, variant = "compact" } = Astro.props;
 const color = POST_COLORS[index % POST_COLORS.length];
-const tagClass = TAG_CLASSES[index % TAG_CLASSES.length];
 ---
 
 <li class="post-item">
   <div class="post-item-left">
-    <div class="post-item-indicator" style={`background: ${color};`}></div>
-    <a class="post-item-title" href={`/blog/${post.id}`}>
-      {post.data.featured && <svg class="featured-icon" width="12" height="12"><use href="#icon-star" /></svg>}
-      {post.data.title}
-    </a>
-  </div>
-  <div class="post-item-meta">
-    {post.data.tags?.[0] && <span class={`tag ${tagClass}`}>{post.data.tags[0]}</span>}
-    <span class="post-item-date">
+    {variant === "compact" && (
+      <div class="post-item-indicator" style={`background: ${color};`}></div>
+    )}
+    <span class="shelf-item-date">
       {new Date(post.data.date).toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })}
     </span>
+    {variant === "detailed" ? (
+      <div class="shelf-item-text">
+        {(post.data.tags?.length || post.data.canonicalUrl) && (
+          <span class="tag">
+            {[
+              ...(post.data.tags ?? []),
+              post.data.canonicalUrl
+                ? (() => { try { return new URL(post.data.canonicalUrl).hostname.replace(/^www\./, ''); } catch { return ''; } })()
+                : '',
+            ].filter(Boolean).join(' · ')}
+          </span>
+        )}
+        <a class="post-item-title" href={`/blog/${post.id}`}>
+          {post.data.featured && <svg class="featured-icon" width="12" height="12"><use href="#icon-star" /></svg>}
+          {post.data.title}
+        </a>
+        {post.data.description && <p class="shelf-item-subtitle">{post.data.description}</p>}
+      </div>
+    ) : (
+      <a class="post-item-title" href={`/blog/${post.id}`}>
+        {post.data.featured && <svg class="featured-icon" width="12" height="12"><use href="#icon-star" /></svg>}
+        {post.data.title}
+      </a>
+    )}
   </div>
 </li>

@@ -1,7 +1,10 @@
 <svg viewBox="0 0 680 380" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <marker id="arrow-gold" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#d49423" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
     </marker>
     <style>
       .th { font-family: Charter, Georgia, 'Times New Roman', serif; font-size: 16px; font-weight: 700; }
@@ -33,6 +36,6 @@
   <text class="th" x="340" y="314" text-anchor="middle" dominant-baseline="central" fill="#000000">Number + failure list</text>
   <text class="ts" x="340" y="334" text-anchor="middle" dominant-baseline="central" fill="#767676">The list drives the next change</text>
 
-  <path d="M 480 320 H 555 V 68 H 484" fill="none" stroke="#d49423" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M 480 320 H 555 V 68 H 492" fill="none" stroke="#d49423" stroke-width="2" marker-end="url(#arrow-gold)"/>
   <text x="555" y="50" text-anchor="middle" fill="#d49423" font-family="Charter, Georgia, serif" font-size="13" font-style="italic" font-weight="600">Revise prompt</text>
 </svg>

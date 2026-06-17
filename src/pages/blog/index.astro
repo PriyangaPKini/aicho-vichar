@@ -8,17 +8,17 @@ const posts = (await getCollection('blog'))
   .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
 ---
 
-<BaseLayout title="All Posts — Priyanga P Kini">
-<section class="intro">
-  <h1 class="page-title">All <em>Vichars<em/></h1>
-<section/>
+<BaseLayout title="All Blogs — Priyanga P Kini">
+<section class="intro intro-large">
+  <h1 class="page-title">All <em>Vichars</em></h1>
+</section>
 <Search />
   {posts.length === 0 ? (
-    <p style="color: var(--text-muted);">No posts yet. Stay tuned.</p>
+    <p style="color: var(--text-muted);">No blogs yet. Stay tuned.</p>
   ) : (
     <ul class="post-list">
       {posts.map((post, i) => (
-        <PostItem post={post} index={i} />
+        <PostItem post={post} index={i} variant="detailed" />
       ))}
     </ul>
   )}

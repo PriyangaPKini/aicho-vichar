@@ -1,25 +1,19 @@
 ---
 const { currentPath = "" } = Astro.props;
-const isHome = currentPath === "/" || currentPath === "";
-const isBlogIndex = currentPath === "/blog" || currentPath === "/blog/";
-const isAbout = currentPath === "/about" || currentPath === "/about/";
+const isActive = (path: string) =>
+  currentPath === path || currentPath === `${path}/`;
 ---
 
-{!isHome && (
-  <nav class="navbar">
-    <div class="navbar-container">
-      <a href="/" class="navbar-brand" title="Home">
-        <svg width="20" height="20" style="color: var(--text);">
+<header class="site-header">
+  <div class="site-header-inner">
+    <nav class="site-header-nav" aria-label="Primary navigation">
+      <a href="/" class={`site-header-link site-header-home${isActive("/") ? " is-active" : ""}`} title="Home" aria-label="Home">
+        <svg width="20" height="20" aria-hidden="true">
           <use href="#icon-home" />
         </svg>
       </a>
-      {!isBlogIndex && (
-        <a href="/blog" class="navbar-link">Blogs</a>
-      )}
-      {!isAbout && (
-        <a href="/about" class="navbar-link">About</a>
-      )}
-    </div>
-  </nav>
-)}
-
+      <a href="/blog" class={`site-header-link${isActive("/blog") ? " is-active" : ""}`}>Blogs</a>
+      <a href="/shelf" class={`site-header-link${isActive("/shelf") ? " is-active" : ""}`}>Shelf</a>
+    </nav>
+  </div>
+</header>

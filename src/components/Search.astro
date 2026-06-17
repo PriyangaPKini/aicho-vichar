@@ -1,10 +1,33 @@
 ---
 import { getCollection } from 'astro:content';
 
-const posts = (await getCollection('blog'))
+interface SearchItem {
+  title: string;
+  body: string;
+  tags?: string[];
+  date?: string;
+  href: string;
+  external?: boolean;
+}
+
+interface Props {
+  items?: SearchItem[];
+  label?: string;
+  placeholder?: string;
+  triggerText?: string;
+}
+
+const {
+  items,
+  label = 'Blogs',
+  placeholder = 'Search blogs...',
+  triggerText = 'Search blogs…',
+} = Astro.props;
+
+const posts = items ? [] : (await getCollection('blog'))
   .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
 
-const searchData = posts.map(post => ({
+const searchData = items ?? posts.map(post => ({
   title: post.data.title,
   body: (post.body || '').replace(/^---[\s\S]*?---/, '').replace(/[#*`>\[\]()!_~]/g, '').trim(),
   tags: post.data.tags || [],
@@ -14,176 +37,185 @@ const searchData = posts.map(post => ({
 }));
 ---
 
-<script id="search-data" type="application/json" set:html={JSON.stringify(searchData)} />
+<div class="search-root" data-search-root>
+  <script class="search-data" type="application/json" set:html={JSON.stringify(searchData)} />
 
-<div class="search-wrap">
-<button class="search-trigger" id="searchTrigger" aria-label="Search posts">
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
-  </svg>
-  <span class="search-trigger-text">Search posts…</span>
-  <span class="search-kbd">⌘K</span>
-</button>
-</div>
-
-<div class="search-overlay" id="searchOverlay">
-  <div class="search-modal">
-    <div class="search-input-wrap">
+  <div class="search-wrap">
+    <button class="search-trigger" type="button" aria-label={triggerText} data-search-trigger>
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
       </svg>
-      <input type="text" class="search-input" id="searchInput" placeholder="Search posts..." autocomplete="off" />
-      <button class="search-close-btn" id="searchEsc" aria-label="Close">&times;</button>
+      <span class="search-trigger-text">{triggerText}</span>
+      <span class="search-kbd">⌘K</span>
+    </button>
+  </div>
+
+  <div class="search-overlay" data-search-overlay>
+    <div class="search-modal">
+      <div class="search-input-wrap">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+        </svg>
+        <input type="text" class="search-input" placeholder={placeholder} autocomplete="off" data-search-input />
+        <button class="search-close-btn" type="button" aria-label="Close" data-search-close>&times;</button>
+      </div>
+      <div class="search-results-label" style="display: none;" data-search-label>{label}</div>
+      <ul class="search-results" data-search-results></ul>
+      <div class="search-empty" style="display: none;" data-search-empty>No results found.</div>
     </div>
-    <div class="search-results-label" id="searchLabel" style="display: none;">Posts</div>
-    <ul class="search-results" id="searchResults"></ul>
-    <div class="search-empty" id="searchEmpty" style="display: none;">No results found.</div>
   </div>
 </div>
 
 <script>
   import Fuse from 'fuse.js';
 
-  const searchData = JSON.parse(document.getElementById('search-data')?.textContent || '[]');
+  const roots = Array.from(document.querySelectorAll<HTMLElement>('[data-search-root]'));
 
-  const fuse = new Fuse(searchData, {
-    keys: [
-      { name: 'title', weight: 0.5 },
-      { name: 'body', weight: 0.3 },
-      { name: 'tags', weight: 0.2 },
-    ],
-    threshold: 0.4,
-    includeMatches: true,
-  });
+  roots.forEach((root) => {
+    const dataEl = root.querySelector<HTMLScriptElement>('.search-data');
+    const searchData = JSON.parse(dataEl?.textContent || '[]');
 
-  const overlay = document.getElementById('searchOverlay');
-  const input = document.getElementById('searchInput');
-  const results = document.getElementById('searchResults');
-  const empty = document.getElementById('searchEmpty');
-  const label = document.getElementById('searchLabel');
-  const trigger = document.getElementById('searchTrigger');
-  const escBtn = document.getElementById('searchEsc');
-
-  function open() {
-    overlay.classList.add('open');
-    input.value = '';
-    input.focus();
-    renderResults('');
-  }
-
-  function close() {
-    overlay.classList.remove('open');
-  }
-
-  trigger.addEventListener('click', open);
-  escBtn.addEventListener('click', close);
-  overlay.addEventListener('click', (e) => {
-    if (e.target === overlay) close();
-  });
-
-  document.addEventListener('keydown', (e) => {
-    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-      e.preventDefault();
-      overlay.classList.contains('open') ? close() : open();
-    }
-    if (e.key === 'Escape' && overlay.classList.contains('open')) {
-      close();
-    }
-  });
-
-  input.addEventListener('input', (e) => {
-    renderResults((e.target as HTMLInputElement).value);
-  });
-
-  input.addEventListener('keydown', (e) => {
-    const items = results.querySelectorAll('.search-result-item');
-    const active = results.querySelector('.search-result-item.active');
-    let index = Array.from(items).indexOf(active);
-
-    if (e.key === 'ArrowDown') {
-      e.preventDefault();
-      if (active) active.classList.remove('active');
-      index = (index + 1) % items.length;
-      items[index]?.classList.add('active');
-    } else if (e.key === 'ArrowUp') {
-      e.preventDefault();
-      if (active) active.classList.remove('active');
-      index = index <= 0 ? items.length - 1 : index - 1;
-      items[index]?.classList.add('active');
-    } else if (e.key === 'Enter') {
-      const selected = results.querySelector('.search-result-item.active') as HTMLElement;
-      if (selected) {
-        selected.click();
-      }
-    }
-  });
-
-  function renderResults(query: string) {
-    const q = query.trim();
-
-    if (q === '') {
-      results.innerHTML = '';
-      empty.style.display = 'none';
-      label.style.display = 'none';
-      return;
-    }
-
-    const matched = fuse.search(q);
-
-    if (matched.length === 0) {
-      results.innerHTML = '';
-      empty.style.display = 'block';
-      label.style.display = 'none';
-      return;
-    }
-
-    empty.style.display = 'none';
-    label.style.display = 'block';
-    results.innerHTML = matched.map((result, i) => {
-      const post = result.item;
-      return `
-        <li class="search-result-item ${i === 0 ? 'active' : ''}" data-href="${post.href}" data-external="${post.external}">
-          <span class="search-result-title">${highlightMatches(post.title, result.matches, 'title')}</span>
-          <span class="search-result-desc">${getSnippet(post.body, q)}</span>
-        </li>
-      `;
-    }).join('');
-
-    results.querySelectorAll('.search-result-item').forEach(item => {
-      item.addEventListener('click', () => {
-        const href = (item as HTMLElement).dataset.href;
-        const external = (item as HTMLElement).dataset.external === 'true';
-        if (href) {
-          close();
-          if (external) window.open(href, '_blank');
-          else window.location.href = href;
-        }
-      });
+    const fuse = new Fuse(searchData, {
+      keys: [
+        { name: 'title', weight: 0.5 },
+        { name: 'body', weight: 0.3 },
+        { name: 'tags', weight: 0.2 },
+      ],
+      threshold: 0.4,
+      includeMatches: true,
     });
-  }
 
-  function getSnippet(body: string, query: string): string {
-    const idx = body.toLowerCase().indexOf(query.toLowerCase());
-    if (idx === -1) return body.slice(0, 80) + '...';
-    const start = Math.max(0, idx - 40);
-    const end = Math.min(body.length, idx + query.length + 60);
-    let snippet = (start > 0 ? '...' : '') + body.slice(start, end) + (end < body.length ? '...' : '');
-    const re = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
-    return snippet.replace(re, '<strong>$1</strong>');
-  }
+    const overlay = root.querySelector<HTMLElement>('[data-search-overlay]');
+    const input = root.querySelector<HTMLInputElement>('[data-search-input]');
+    const results = root.querySelector<HTMLElement>('[data-search-results]');
+    const empty = root.querySelector<HTMLElement>('[data-search-empty]');
+    const label = root.querySelector<HTMLElement>('[data-search-label]');
+    const trigger = root.querySelector<HTMLElement>('[data-search-trigger]');
+    const closeBtn = root.querySelector<HTMLElement>('[data-search-close]');
 
-  function highlightMatches(text: string, matches: any[], key: string): string {
-    const match = matches?.find(m => m.key === key);
-    if (!match) return text;
+    if (!overlay || !input || !results || !empty || !label || !trigger || !closeBtn) return;
 
-    const chars = [...text];
-    const highlighted = chars.map((c) => c);
-    for (const [start, end] of match.indices.reverse()) {
-      highlighted.splice(end + 1, 0, '</mark>');
-      highlighted.splice(start, 0, '<mark>');
+    function open() {
+      overlay.classList.add('open');
+      input.value = '';
+      renderResults('');
+      requestAnimationFrame(() => input.focus());
     }
-    return highlighted.join('');
-  }
+
+    function close() {
+      overlay.classList.remove('open');
+    }
+
+    trigger.addEventListener('click', open);
+    closeBtn.addEventListener('click', close);
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) close();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        overlay.classList.contains('open') ? close() : open();
+      }
+      if (e.key === 'Escape' && overlay.classList.contains('open')) {
+        close();
+      }
+    });
+
+    input.addEventListener('input', () => {
+      renderResults(input.value);
+    });
+
+    input.addEventListener('keydown', (e) => {
+      const items = results.querySelectorAll('.search-result-item');
+      if (items.length === 0) return;
+
+      const active = results.querySelector('.search-result-item.active');
+      let index = Array.from(items).indexOf(active);
+
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        if (active) active.classList.remove('active');
+        index = (index + 1) % items.length;
+        items[index]?.classList.add('active');
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (active) active.classList.remove('active');
+        index = index <= 0 ? items.length - 1 : index - 1;
+        items[index]?.classList.add('active');
+      } else if (e.key === 'Enter') {
+        const selected = results.querySelector('.search-result-item.active') as HTMLElement;
+        if (selected) selected.click();
+      }
+    });
+
+    function renderResults(query: string) {
+      const q = query.trim();
+
+      if (q === '') {
+        results.innerHTML = '';
+        empty.style.display = 'none';
+        label.style.display = 'none';
+        return;
+      }
+
+      const matched = fuse.search(q);
+
+      if (matched.length === 0) {
+        results.innerHTML = '';
+        empty.style.display = 'block';
+        label.style.display = 'none';
+        return;
+      }
+
+      empty.style.display = 'none';
+      label.style.display = 'block';
+      results.innerHTML = matched.map((result, i) => {
+        const post = result.item;
+        return `
+          <li class="search-result-item ${i === 0 ? 'active' : ''}" data-href="${post.href}" data-external="${post.external}">
+            <span class="search-result-title">${highlightMatches(post.title, result.matches, 'title')}</span>
+            <span class="search-result-desc">${getSnippet(post.body, q)}</span>
+          </li>
+        `;
+      }).join('');
+
+      results.querySelectorAll('.search-result-item').forEach(item => {
+        item.addEventListener('click', () => {
+          const href = (item as HTMLElement).dataset.href;
+          const external = (item as HTMLElement).dataset.external === 'true';
+          if (href) {
+            close();
+            if (external) window.open(href, '_blank');
+            else window.location.href = href;
+          }
+        });
+      });
+    }
+
+    function getSnippet(body: string, query: string): string {
+      const idx = body.toLowerCase().indexOf(query.toLowerCase());
+      if (idx === -1) return body.slice(0, 80) + '...';
+      const start = Math.max(0, idx - 40);
+      const end = Math.min(body.length, idx + query.length + 60);
+      let snippet = (start > 0 ? '...' : '') + body.slice(start, end) + (end < body.length ? '...' : '');
+      const re = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+      return snippet.replace(re, '<strong>$1</strong>');
+    }
+
+    function highlightMatches(text: string, matches: any[], key: string): string {
+      const match = matches?.find(m => m.key === key);
+      if (!match) return text;
+
+      const chars = [...text];
+      const highlighted = chars.map((c) => c);
+      for (const [start, end] of match.indices.reverse()) {
+        highlighted.splice(end + 1, 0, '</mark>');
+        highlighted.splice(start, 0, '<mark>');
+      }
+      return highlighted.join('');
+    }
+  });
 </script>
 
 <style>
