@@ -1,8 +1,8 @@
-# aiche-vichar
+# aicho-vichar
 
 A small personal blog — engineering notes, system-design lessons, and the occasional reflection.
 
-Live at <https://aiche-vichar.netlify.app/>.
+Live at <https://aicho-vichar.netlify.app/>.
 
 ## Stack
 
