@@ -35,10 +35,26 @@ const shareImageUrl = new URL(image, Astro.site).toString();
 </head>
 <body>
   <Icons />
+  <div class="flash-notice" data-flash-notice hidden></div>
   <SiteHeader currentPath={currentPath} />
   <main class="main">
     <slot />
   </main>
   <SiteFooter />
+  <script>
+    const flash = document.querySelector<HTMLElement>('[data-flash-notice]');
+    let flashTimer: number | undefined;
+
+    window.addEventListener('site:notice', (event) => {
+      if (!flash) return;
+      const message = (event as CustomEvent<string>).detail || 'Done.';
+      flash.textContent = message;
+      flash.hidden = false;
+      window.clearTimeout(flashTimer);
+      flashTimer = window.setTimeout(() => {
+        flash.hidden = true;
+      }, 3000);
+    });
+  </script>
 </body>
 </html>
