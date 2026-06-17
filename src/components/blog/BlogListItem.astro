@@ -2,7 +2,6 @@
 import type { CollectionEntry } from 'astro:content';
 import { POST_COLORS } from '../../constants';
 import { formatShortDate } from '../../lib/date';
-import { hostnameFromUrl } from '../../lib/url';
 
 interface Props {
   post: CollectionEntry<'blog'>;
@@ -24,12 +23,9 @@ const color = POST_COLORS[index % POST_COLORS.length];
     </span>
     {variant === "detailed" ? (
       <div class="shelf-item-text">
-        {(post.data.tags?.length || post.data.canonicalUrl) && (
+        {post.data.tags?.length && (
           <span class="tag">
-            {[
-              ...(post.data.tags ?? []),
-              post.data.canonicalUrl ? hostnameFromUrl(post.data.canonicalUrl) : '',
-            ].filter(Boolean).join(' · ')}
+            {post.data.tags.join(' · ')}
           </span>
         )}
         <a class="post-item-title" href={`/blog/${post.id}`}>
