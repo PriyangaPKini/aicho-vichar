@@ -1,11 +1,10 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import PostItem from '../../components/PostItem.astro';
-import Search from '../../components/Search.astro';
-import { getCollection } from 'astro:content';
+import BlogListItem from '../../components/blog/BlogListItem.astro';
+import Search from '../../components/search/Search.astro';
+import { getSortedCollection } from '../../lib/content';
 
-const posts = (await getCollection('blog'))
-  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+const posts = await getSortedCollection('blog');
 ---
 
 <BaseLayout title="All Blogs — Priyanga P Kini">
@@ -18,7 +17,7 @@ const posts = (await getCollection('blog'))
   ) : (
     <ul class="post-list">
       {posts.map((post, i) => (
-        <PostItem post={post} index={i} variant="detailed" />
+        <BlogListItem post={post} index={i} variant="detailed" />
       ))}
     </ul>
   )}

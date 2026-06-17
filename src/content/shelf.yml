@@ -1,0 +1,17 @@
+- id: ai-engineering
+  type: book
+  title: AI Engineering
+  creator: Chip Huyen
+  url: https://www.oreilly.com/library/view/ai-engineering/9781098166298/
+  sourceName: O'Reilly Media
+  date: "2026-06-16"
+  note: A grounded, end-to-end guide to building production LLM systems.
+
+- id: pragmatic-programmer
+  type: book
+  title: The Pragmatic Programmer
+  creator: David Thomas & Andrew Hunt
+  url: https://www.oreilly.com/library/view/the-pragmatic-programmer/9780135956977/
+  sourceName: O'Reilly Media
+  date: "2026-06-16"
+  note: Timeless principles for thinking about software craftsmanship — short, sharp, and worth revisiting every few years.

@@ -1,8 +1,11 @@
 ---
-import { POST_COLORS } from "../constants";
+import type { CollectionEntry } from 'astro:content';
+import { POST_COLORS } from '../../constants';
+import { formatShortDate } from '../../lib/date';
+import { hostnameFromUrl } from '../../lib/url';
 
 interface Props {
-  post: any;
+  post: CollectionEntry<'blog'>;
   index: number;
   variant?: "compact" | "detailed";
 }
@@ -17,7 +20,7 @@ const color = POST_COLORS[index % POST_COLORS.length];
       <div class="post-item-indicator" style={`background: ${color};`}></div>
     )}
     <span class="shelf-item-date">
-      {new Date(post.data.date).toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })}
+      {formatShortDate(post.data.date)}
     </span>
     {variant === "detailed" ? (
       <div class="shelf-item-text">
@@ -25,9 +28,7 @@ const color = POST_COLORS[index % POST_COLORS.length];
           <span class="tag">
             {[
               ...(post.data.tags ?? []),
-              post.data.canonicalUrl
-                ? (() => { try { return new URL(post.data.canonicalUrl).hostname.replace(/^www\./, ''); } catch { return ''; } })()
-                : '',
+              post.data.canonicalUrl ? hostnameFromUrl(post.data.canonicalUrl) : '',
             ].filter(Boolean).join(' · ')}
           </span>
         )}

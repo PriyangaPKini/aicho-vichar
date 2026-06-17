@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap');
+
+:root {
+  --bg: #faf6ec;
+  --navbar-bg: #f3ecdb;
+  --text: #1a1a1a;
+  --text-muted: #6b6258;
+  --accent: #d49423;
+  --accent-hover: #b07a14;
+  --gold: #d49423;
+  --maroon: #8b2c2c;
+  --border: #d8ccb4;
+  --card-bg: #f5efe1;
+  --font-heading: 'Fraunces', 'Lora', Georgia, serif;
+  --font-body: 'Inter', sans-serif;
+  --navbar-height: 60px;
+  --accent-light-bg: rgba(212, 148, 35, 0.1);
+  --accent-light-bg-lighter: rgba(212, 148, 35, 0.06);
+  --icon-sm: 20px;
+  --transition-duration: 0.15s;
+  --border-radius-sm: 3px;
+  --border-radius-md: 6px;
+  --border-radius-lg: 8px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  font-size: 15px;
+  display: flex;
+  flex-direction: column;
+}

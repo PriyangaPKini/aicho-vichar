@@ -30,19 +30,27 @@ Copy `.env.example` to `.env` and fill in the Firebase keys for sign-in/comments
 
 ```
 src/
-├── components/        # Navbar, Footer, Search, PostItem, Comments, SignInModal, …
+├── components/
+│   ├── auth/          # sign-in/sign-up modals
+│   ├── blog/          # blog list item, post header/nav, TOC, canonical callout
+│   ├── comments/      # threaded comments UI
+│   ├── layout/        # site header/footer
+│   ├── search/        # reusable Fuse search component + client behavior
+│   ├── shelf/         # shelf list item
+│   └── ui/            # shared icons/icon links
 ├── content/
-│   └── blog/          # markdown posts
-├── content.config.ts  # zod schema for the `blog` collection
-├── layouts/           # BaseLayout, PostLayout
-├── lib/firebase.ts    # client SDK init, auth helpers, comment CRUD
+│   ├── blog/          # markdown blog posts
+│   └── shelf.yml      # shelf recommendations
+├── content.config.ts  # zod schemas for content collections
+├── layouts/           # BaseLayout
+├── lib/               # content/date/search/url helpers + Firebase client
 ├── pages/
-│   ├── about.astro
 │   ├── blog/
 │   │   ├── index.astro
 │   │   └── [slug].astro
-│   └── index.astro
-├── styles/global.css
+│   ├── index.astro
+│   └── shelf.astro
+├── styles/            # split CSS modules imported by global.css
 ├── constants.ts
 └── utils.ts
 public/                # static assets (favicon, avatar, fonts, blog images)
@@ -53,6 +61,7 @@ scripts/
 ## Notes
 
 - Posts can carry a `canonicalUrl` to declare they were originally published elsewhere — the post still renders on-site with an "Originally published on …" callout linking back to the source.
+- Add shelf recommendations to `src/content/shelf.yml`; each item has structured fields plus a `note` used in the list and search.
 - Deploys are manual: trigger the `Deploy to Netlify` workflow from the Actions tab.
 
 See `AGENTS.md` for repo conventions, the content sync workflow, and deployment details.

@@ -1,0 +1,223 @@
+---
+import { getCollection } from 'astro:content';
+import { blogToSearchItem, type SearchItem } from '../../lib/search';
+
+interface Props {
+  items?: SearchItem[];
+  label?: string;
+  placeholder?: string;
+  triggerText?: string;
+}
+
+const {
+  items,
+  label = 'Blogs',
+  placeholder = 'Search blogs...',
+  triggerText = 'Search blogs…',
+} = Astro.props;
+
+const posts = items ? [] : (await getCollection('blog'))
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+
+const searchData = items ?? posts.map(blogToSearchItem);
+---
+
+<div class="search-root" data-search-root>
+  <script class="search-data" type="application/json" set:html={JSON.stringify(searchData)} />
+
+  <div class="search-wrap">
+    <button class="search-trigger" type="button" aria-label={triggerText} data-search-trigger>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+      </svg>
+      <span class="search-trigger-text">{triggerText}</span>
+      <span class="search-kbd">⌘K</span>
+    </button>
+  </div>
+
+  <div class="search-overlay" data-search-overlay>
+    <div class="search-modal">
+      <div class="search-input-wrap">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+        </svg>
+        <input type="text" class="search-input" placeholder={placeholder} autocomplete="off" data-search-input />
+        <button class="search-close-btn" type="button" aria-label="Close" data-search-close>&times;</button>
+      </div>
+      <div class="search-results-label" style="display: none;" data-search-label>{label}</div>
+      <ul class="search-results" data-search-results></ul>
+      <div class="search-empty" style="display: none;" data-search-empty>No results found.</div>
+    </div>
+  </div>
+</div>
+
+<script src="./search-client.ts"></script>
+
+
+<style>
+  .search-wrap {
+    display: block;
+    margin-bottom: 2rem;
+  }
+
+  .search-trigger {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    cursor: pointer;
+    color: var(--text-muted);
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    text-align: left;
+    transition: border-color 0.15s, background-color 0.15s;
+  }
+
+  .search-trigger-text {
+    flex: 1;
+  }
+
+  .search-trigger:hover {
+    border-color: var(--accent);
+    background: var(--accent-light-bg-lighter);
+  }
+
+  .search-kbd {
+    font-family: var(--font-body);
+    font-size: 0.65rem;
+    padding: 0.1rem 0.35rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    color: var(--text-muted);
+  }
+
+  .search-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 400;
+    background: rgba(26, 26, 26, 0.45);
+    backdrop-filter: blur(4px);
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 15vh;
+  }
+
+  .search-overlay.open { display: flex; }
+
+  .search-modal {
+    width: 100%;
+    max-width: 540px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: 0 16px 48px rgba(26, 26, 26, 0.18);
+    overflow: hidden;
+  }
+
+  .search-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.85rem 1.25rem;
+    color: var(--text-muted);
+  }
+
+  .search-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    background: transparent;
+    color: var(--text);
+  }
+
+  .search-input::placeholder { color: var(--text-muted); }
+
+  .search-close-btn {
+    background: none;
+    border: none;
+    font-size: 1.3rem;
+    cursor: pointer;
+    color: var(--text-muted);
+    line-height: 1;
+    padding: 0.1rem 0.3rem;
+    border-radius: 4px;
+    transition: all 0.15s;
+  }
+
+  .search-close-btn:hover {
+    color: var(--text);
+    background: var(--accent-light-bg);
+  }
+
+  .search-results-label {
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    padding: 0.75rem 1.25rem 0.35rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .search-results {
+    list-style: none;
+    max-height: 50vh;
+    overflow-y: auto;
+    padding: 0.75rem 0;
+  }
+
+  :global(.search-result-item) {
+    padding: 0.75rem 1.25rem;
+    color: var(--text);
+    cursor: pointer;
+    transition: background 0.1s;
+  }
+
+  :global(.search-result-item:hover),
+  :global(.search-result-item.active) {
+    background: var(--accent-light-bg);
+  }
+
+  :global(.search-result-title) {
+    font-size: 0.9rem;
+    font-weight: 600;
+    display: block;
+    line-height: 1.4;
+  }
+
+  :global(.search-result-desc) {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    display: block;
+    margin-top: 0.2rem;
+  }
+
+  .search-empty {
+    padding: 2rem 1rem;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+  }
+
+  :global(mark) {
+    background: var(--accent-light-bg);
+    color: var(--text);
+    padding: 0 0.1rem;
+    border-radius: 2px;
+  }
+
+  @media (max-width: 768px) {
+    .search-trigger-text { display: none; }
+    .search-kbd { display: none; }
+    .search-overlay { padding-top: 5vh; padding: 1rem; }
+    .search-modal { max-width: 100%; }
+  }
+</style>

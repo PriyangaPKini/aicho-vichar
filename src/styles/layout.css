@@ -1,0 +1,124 @@
+/* ── Site header ── */
+.site-header {
+  width: 100%;
+  padding: 1.25rem 1.5rem 0;
+}
+
+.site-header-inner {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.site-header-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.site-header-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  padding: 0.25rem 0.45rem;
+  color: var(--text);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: var(--border-radius-sm);
+  transition: background-color var(--transition-duration), color var(--transition-duration);
+}
+
+.site-header-link:hover {
+  background: var(--accent-light-bg);
+}
+
+.site-header-link.is-active {
+  color: var(--gold);
+}
+
+.site-header-home {
+  width: 36px;
+  padding: 0.3rem;
+}
+
+
+/* ── Main ── */
+.main {
+  width: 100%;
+  max-width: 720px;
+  margin-top: 0;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 0;
+  padding: 3rem 3rem;
+  flex: 1;
+}
+
+
+/* ── Site footer ── */
+.site-footer {
+  margin-top: 1.5rem;
+  padding: 2rem 1.5rem 1.5rem;
+  background: var(--navbar-bg);
+  border-top: 1px solid var(--border);
+  font-family: var(--font-body);
+  color: var(--text-muted);
+}
+
+.site-footer-inner {
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.site-footer-brand { margin: 0; display: flex; flex-direction: column; gap: 0.2rem; }
+
+.site-footer-title {
+  font-family: var(--font-heading);
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+
+.site-footer-title em {
+  color: var(--gold);
+  font-style: italic;
+}
+
+.site-footer-tagline { font-size: 0.85rem; }
+
+.site-footer-socials {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.site-footer-social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--border-radius-md);
+  color: var(--text);
+  transition: background-color var(--transition-duration);
+}
+
+.site-footer-social-link:hover { background: var(--accent-light-bg); }
+
+.site-footer-social-link svg {
+  width: var(--icon-sm);
+  height: var(--icon-sm);
+}
+

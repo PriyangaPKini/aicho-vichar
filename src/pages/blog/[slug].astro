@@ -1,15 +1,18 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import SignInModal from '../../components/SignInModal.astro';
-import SignUpModal from '../../components/SignUpModal.astro';
-import Comments from '../../components/Comments.astro';
-import { getCollection, render } from 'astro:content';
-import { splitTitleEmphasis } from '../../utils';
+import SignInModal from '../../components/auth/SignInModal.astro';
+import SignUpModal from '../../components/auth/SignUpModal.astro';
+import Comments from '../../components/comments/Comments.astro';
+import CanonicalCallout from '../../components/blog/CanonicalCallout.astro';
+import PostHeader from '../../components/blog/PostHeader.astro';
+import PostNavigation from '../../components/blog/PostNavigation.astro';
+import TableOfContents from '../../components/blog/TableOfContents.astro';
+import { render } from 'astro:content';
+import { getSortedCollection } from '../../lib/content';
 
 export async function getStaticPaths() {
-  const posts = (await getCollection('blog'))
-    .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
-  
+  const posts = await getSortedCollection('blog');
+
   return posts.map((post, index) => ({
     params: { slug: post.id },
     props: {
@@ -21,47 +24,21 @@ export async function getStaticPaths() {
 }
 
 const { post, prev, next } = Astro.props;
-
 const { Content, headings } = await render(post);
-const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
-const canonicalUrl = post.data.canonicalUrl;
-const canonicalSource = canonicalUrl
-  ? new URL(canonicalUrl).hostname.replace(/^www\./, '')
-  : null;
-const { head, em } = splitTitleEmphasis(post.data.title, post.data.titleEmphasis);
 ---
 
 <BaseLayout title={`${post.data.title} — Priyanga P Kini`} description={post.data.description}>
-  {toc.length > 0 && (
-    <aside class="toc" data-toc aria-label="Table of contents">
-      <p class="toc-label">On this page</p>
-      <ul>
-        {toc.map((h) => (
-          <li class={`toc-${h.depth}`}>
-            <a href={`#${h.slug}`}>{h.text}</a>
-          </li>
-        ))}
-      </ul>
-    </aside>
-  )}
+  <TableOfContents headings={headings} />
 
-  <section class="intro intro-post">
-    <h1 class="page-title">{head}{em && <> <em>{em}</em></>}</h1>
-    <p class="post-item-date">
-      {new Date(post.data.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
-    </p>
-  </section>
+  <PostHeader
+    title={post.data.title}
+    date={post.data.date}
+    titleEmphasis={post.data.titleEmphasis}
+  />
 
   <article class="prose" data-blog-content>
     <Content />
-    {canonicalUrl && (
-      <p class="post-canonical">
-        Originally published on{' '}
-        <a href={canonicalUrl} target="_blank" rel="noopener noreferrer">
-          {canonicalSource}
-        </a>.
-      </p>
-    )}
+    <CanonicalCallout url={post.data.canonicalUrl} />
   </article>
 
   <Comments postSlug={post.id} />
@@ -69,38 +46,5 @@ const { head, em } = splitTitleEmphasis(post.data.title, post.data.titleEmphasis
   <SignInModal />
   <SignUpModal />
 
-  <nav class="post-navigation">
-    <div class="nav-prev">
-      {prev ? (
-        <a href={`/blog/${prev.id}`}>← {prev.data.title}</a>
-      ) : (
-        <span></span>
-      )}
-    </div>
-    <div class="nav-next">
-      {next ? (
-        <a href={`/blog/${next.id}`}>{next.data.title} →</a>
-      ) : (
-        <span></span>
-      )}
-    </div>
-  </nav>
+  <PostNavigation prev={prev} next={next} />
 </BaseLayout>
-
-<script>
-  const toc = document.querySelector<HTMLElement>('[data-toc]');
-  const blogContent = document.querySelector<HTMLElement>('[data-blog-content]');
-
-  if (toc && blogContent) {
-    const updateTocVisibility = () => {
-      const contentRect = blogContent.getBoundingClientRect();
-      const tocRect = toc.getBoundingClientRect();
-      const isReadingContent = contentRect.top < window.innerHeight && contentRect.bottom > tocRect.top;
-      toc.classList.toggle('is-hidden', !isReadingContent);
-    };
-
-    updateTocVisibility();
-    window.addEventListener('scroll', updateTocVisibility, { passive: true });
-    window.addEventListener('resize', updateTocVisibility);
-  }
-</script>

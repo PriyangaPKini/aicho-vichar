@@ -1,35 +1,20 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import PostItem from '../components/PostItem.astro';
-import { getCollection } from 'astro:content';
+import BlogListItem from '../components/blog/BlogListItem.astro';
+import { HOME_LATEST_BLOG_LIMIT } from '../constants';
+import { getLatestBlogPosts } from '../lib/content';
 
-const posts = (await getCollection('blog'))
-  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
-  .slice(0, 5);
-
-const slides = [
-  { src: '/gallery/holiday-in-munnar.jpeg', alt: 'Holiday in Munnar', caption: 'Holiday in Munnar' },
-  { src: '/gallery/fifth-elephant-pune-2026.jpg', alt: 'The Fifth Elephant, Pune 2026 group photo', caption: 'The Fifth Elephant, Pune 2026' },
-  { src: '/gallery/in-clojure-2024.jpg', alt: 'IN/Clojure 2024 Bengaluru group photo', caption: 'IN/Clojure 2024, Bengaluru' },
-  { src: '/gallery/clojure-bridge-2024.jpg', alt: 'ClojureBridge 2024 group photo', caption: 'ClojureBridge 2024' },
-  { src: '/gallery/punjab-healthcare-field-visit.jpg', alt: 'Field visit to a healthcare centre in Punjab', caption: 'Field visit to healthcare centres in Punjab, 2022' },
-  { src: '/gallery/angelhack-kochi-2018.jpg', alt: 'AngelHack Kochi 2018 winners', caption: 'AngelHack Kochi 2018' },
-  { src: '/gallery/nilenso-offsite-board-games.jpg', alt: 'Board games at a nilenso offsite', caption: 'Board games at a nilenso offsite' },
-];
+const posts = await getLatestBlogPosts(HOME_LATEST_BLOG_LIMIT);
 ---
 
 <BaseLayout>
-<section class="cover" data-cover>
-    {slides.map((slide, i) => (
-      <figure class={`cover-slide${i === 0 ? ' is-active' : ''}`}>
-        <img src={slide.src} alt={slide.alt} />
-        <figcaption>{slide.caption}</figcaption>
-      </figure>
-    ))}
-    <div class="cover-dots" data-cover-dots></div>
-  </section>
+  <figure class="cover">
+    <img src="/gallery/holiday-in-munnar.jpeg" alt="Holiday in Munnar" />
+    <figcaption>Holiday in Munnar</figcaption>
+  </figure>
+
   <section class="intro intro-large">
-    <h1 class="page-title"> I'm <em>Priyanga</em> </h1>
+<h1 class="page-title"> I'm <em> Priyanga Kini </em></h1>
     <p>I build and consult on software for a living.</p>
     <p>I'm a member of <a href="https://nilenso.com" target="_blank" rel="noopener noreferrer" class="link-gold">nilenso</a>, an employee-owned software co-op, so the job sits across engineering, consulting, and helping run the place.</p>
     <p>I share reflections on work and life here.</p>
@@ -42,7 +27,7 @@ const slides = [
       </div>
       <ul class="post-list">
         {posts.map((post, i) => (
-          <PostItem post={post} index={i} />
+          <BlogListItem post={post} index={i} />
         ))}
       </ul>
       <p class="section-more">
@@ -51,40 +36,3 @@ const slides = [
     </section>
   )}
 </BaseLayout>
-
-<script>
-  const cover = document.querySelector<HTMLElement>('[data-cover]');
-  const dotsWrap = cover?.querySelector<HTMLElement>('[data-cover-dots]');
-  const slides = cover ? Array.from(cover.querySelectorAll<HTMLElement>('.cover-slide')) : [];
-
-  if (cover && dotsWrap && slides.length > 1) {
-    const INTERVAL_MS = 4500;
-    let current = 0;
-    let timer: number | undefined;
-
-    const show = (next: number, manual = false) => {
-      slides[current].classList.remove('is-active');
-      dotsWrap.children[current].classList.remove('is-active');
-      current = (next + slides.length) % slides.length;
-      slides[current].classList.add('is-active');
-      dotsWrap.children[current].classList.add('is-active');
-      if (manual) restart();
-    };
-
-    const restart = () => {
-      if (timer) window.clearInterval(timer);
-      timer = window.setInterval(() => show(current + 1), INTERVAL_MS);
-    };
-
-    slides.forEach((_, i) => {
-      const dot = document.createElement('button');
-      dot.type = 'button';
-      dot.className = 'cover-dot' + (i === 0 ? ' is-active' : '');
-      dot.setAttribute('aria-label', `Slide ${i + 1}`);
-      dot.addEventListener('click', () => show(i, true));
-      dotsWrap.appendChild(dot);
-    });
-
-    restart();
-  }
-</script>

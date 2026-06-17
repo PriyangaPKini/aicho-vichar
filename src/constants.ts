@@ -4,6 +4,8 @@ export const SOCIAL_ITEMS = [
   { href: "https://linkedin.com/in/priyangapkini", label: "LinkedIn", icon: "icon-linkedin", color: "var(--text)" },
 ];
 
-// Post colors and tag classes
+// Home page
+export const HOME_LATEST_BLOG_LIMIT = 3;
+
+// Post colors
 export const POST_COLORS = ['var(--gold)', '#1a1a1a'];
-export const TAG_CLASSES = ['tag-neutral', 'tag-neutral', 'tag-neutral', 'tag-neutral', 'tag-neutral'];

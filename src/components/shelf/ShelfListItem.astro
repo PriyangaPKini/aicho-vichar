@@ -1,0 +1,30 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { formatShortDate } from '../../lib/date';
+
+interface Props {
+  item: CollectionEntry<'shelf'>;
+}
+
+const { item } = Astro.props;
+---
+
+<li class="post-item">
+  <div class="post-item-left">
+    {item.data.date && (
+      <span class="shelf-item-date">
+        {formatShortDate(item.data.date)}
+      </span>
+    )}
+    <div class="shelf-item-text">
+      <span class="tag">
+        {item.data.type} · {item.data.creator}{item.data.sourceName && <> · {item.data.sourceName}</>}
+      </span>
+      <a class="post-item-title" href={item.data.url} target="_blank" rel="noopener noreferrer">
+        {item.data.title}
+        <svg class="external-icon" width="12" height="12"><use href="#icon-external" /></svg>
+      </a>
+      <p class="shelf-item-subtitle">{item.data.note}</p>
+    </div>
+  </div>
+</li>

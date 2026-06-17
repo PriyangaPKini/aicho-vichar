@@ -1,0 +1,182 @@
+/* ── Sign-in Modal ── */
+.signin-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  background: rgba(26, 26, 26, 0.45);
+  backdrop-filter: blur(4px);
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.signin-overlay.open {
+  display: flex;
+}
+
+.signin-modal {
+  position: relative;
+  background: #fff;
+  width: 100%;
+  max-width: 460px;
+  border-radius: 12px;
+  padding: 2.5rem 2rem 2rem;
+  text-align: center;
+  box-shadow: 0 24px 60px rgba(26, 26, 26, 0.18);
+}
+
+.signin-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  transition: color var(--transition-duration), background-color var(--transition-duration);
+}
+
+.signin-close:hover {
+  color: var(--text);
+  background: var(--accent-light-bg);
+}
+
+.signin-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 8px;
+  object-fit: cover;
+  margin-bottom: 1rem;
+}
+
+.signin-modal h2 {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 0 0 1.75rem;
+  letter-spacing: -0.01em;
+}
+
+.signin-form {
+  text-align: left;
+}
+
+.signin-form label {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+  color: var(--text);
+}
+
+.signin-form input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--text);
+  outline: none;
+  transition: border-color var(--transition-duration);
+  margin-bottom: 1.5rem;
+}
+
+.signin-form input:focus {
+  border-color: var(--accent);
+}
+
+.signin-continue {
+  width: 100%;
+  padding: 0.85rem;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color var(--transition-duration);
+}
+
+.signin-continue:hover {
+  background: var(--accent-hover);
+}
+
+.signin-sub {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin: -1rem 0 1.5rem;
+}
+
+.signin-google {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1rem;
+  background: #fff;
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color var(--transition-duration), border-color var(--transition-duration);
+}
+
+.signin-google:hover {
+  background: var(--accent-light-bg-lighter);
+  border-color: var(--accent);
+}
+
+.signin-error {
+  color: #b91c1c;
+  font-size: 0.85rem;
+  margin-top: 0.75rem;
+  min-height: 1.2em;
+}
+
+.signin-success {
+  text-align: center;
+  padding: 1rem 0 0.5rem;
+}
+
+.signin-success-headline {
+  font-family: var(--font-heading);
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.signin-success-body {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.signin-switch {
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.signin-switch a {
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.signin-switch a:hover {
+  text-decoration: underline;
+}

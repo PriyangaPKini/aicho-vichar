@@ -1,0 +1,18 @@
+---
+import { formatLongDate } from '../../lib/date';
+import { splitTitleEmphasis } from '../../utils';
+
+interface Props {
+  title: string;
+  date: string;
+  titleEmphasis?: string;
+}
+
+const { title, date, titleEmphasis } = Astro.props;
+const { head, em } = splitTitleEmphasis(title, titleEmphasis);
+---
+
+<section class="intro intro-post">
+  <h1 class="page-title">{head}{em && <> <em>{em}</em></>}</h1>
+  <p class="post-item-date">{formatLongDate(date)}</p>
+</section>

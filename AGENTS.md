@@ -24,20 +24,28 @@ For cross-project conventions, see `~/.claude/rules/` (`contributing.md`, `codin
 
 ```
 src/
-├── components/        # Navbar, Footer, Search, PostItem, Comments, SignInModal, SignUpModal, …
+├── components/
+│   ├── auth/          # SignInModal, SignUpModal
+│   ├── blog/          # BlogListItem, PostHeader, PostNavigation, TableOfContents, …
+│   ├── comments/      # threaded comments UI
+│   ├── layout/        # SiteHeader, SiteFooter
+│   ├── search/        # reusable Search component + client behavior
+│   ├── shelf/         # ShelfListItem
+│   └── ui/            # Icons, IconLink
 ├── content/
-│   └── blog/          # markdown posts; one .md per post
-├── content.config.ts  # zod schema for the `blog` collection
-├── layouts/           # BaseLayout, PostLayout
-├── lib/firebase.ts    # Firebase init + auth/comments helpers
+│   ├── blog/          # markdown posts; one .md per post
+│   └── shelf.yml      # shelf recommendations
+├── content.config.ts  # zod schemas for content collections
+├── layouts/           # BaseLayout
+├── lib/               # Firebase client + content/date/search/url helpers
 ├── pages/
-│   ├── about.astro
 │   ├── blog/
 │   │   ├── index.astro
 │   │   └── [slug].astro
-│   └── index.astro
-├── styles/global.css
-├── constants.ts       # site-wide constants (nav links, social, etc.)
+│   ├── index.astro
+│   └── shelf.astro
+├── styles/            # CSS modules imported by global.css
+├── constants.ts       # site-wide constants
 └── utils.ts
 public/                # static assets (favicon, avatar, fonts, blog images)
 scripts/
@@ -58,7 +66,9 @@ Blog posts live in `src/content/blog/*.md` and must satisfy the schema in `src/c
 | `titleEmphasis` | optional | substring of the title to render in gold italic; auto-falls back to the tail after a `:`, `—`, or `–` |
 | `featured` | optional | bumps the post to the top with a star icon |
 
-When adding fields, update the schema **and** any consuming components (`PostItem.astro`, `blog/[slug].astro`, `scripts/sync-notion.mjs`) in the same PR.
+Shelf items live in `src/content/shelf.yml` and must satisfy the `shelf` schema in `src/content.config.ts`. Add one YAML entry per recommendation; the `note` field is used in the list and search text.
+
+When adding fields, update the schema **and** any consuming components (`BlogListItem.astro`, `ShelfListItem.astro`, `blog/[slug].astro`, `scripts/sync-notion.mjs`) in the same PR.
 
 ## Commands
 

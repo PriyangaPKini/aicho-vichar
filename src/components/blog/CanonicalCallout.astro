@@ -1,0 +1,19 @@
+---
+import { hostnameFromUrl } from '../../lib/url';
+
+interface Props {
+  url?: string;
+}
+
+const { url } = Astro.props;
+const source = url ? hostnameFromUrl(url) : null;
+---
+
+{url && (
+  <p class="post-canonical">
+    Originally published on{' '}
+    <a href={url} target="_blank" rel="noopener noreferrer">
+      {source}
+    </a>.
+  </p>
+)}

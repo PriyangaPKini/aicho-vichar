@@ -1,5 +1,5 @@
 import { defineCollection, z } from 'astro:content';
-import { glob } from 'astro/loaders';
+import { file, glob } from 'astro/loaders';
 
 const blog = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/blog' }),
@@ -14,4 +14,17 @@ const blog = defineCollection({
   }),
 });
 
-export const collections = { blog };
+const shelf = defineCollection({
+  loader: file('src/content/shelf.yml'),
+  schema: z.object({
+    type: z.enum(['book', 'talk', 'article', 'podcast', 'video']),
+    title: z.string(),
+    creator: z.string(),
+    url: z.string().url(),
+    sourceName: z.string().optional(),
+    date: z.string().optional(),
+    note: z.string(),
+  }),
+});
+
+export const collections = { blog, shelf };

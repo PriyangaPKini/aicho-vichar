@@ -1,0 +1,76 @@
+.post-canonical {
+  margin: 3rem 0 0;
+  padding: 1rem 1.25rem;
+  background: var(--accent-light-bg-lighter);
+  border-left: 3px solid var(--gold);
+  border-radius: var(--border-radius-md);
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.post-canonical a {
+  color: var(--gold);
+  text-decoration: underline;
+  text-decoration-color: var(--gold);
+  text-underline-offset: 3px;
+}
+
+/* ── Table of Contents ── */
+.toc {
+  position: fixed;
+  top: 14rem;
+  right: 2rem;
+  width: 220px;
+  max-height: calc(100vh - 16rem);
+  overflow-y: auto;
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  opacity: 1;
+  transition: opacity var(--transition-duration);
+}
+
+.toc.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.toc-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin-bottom: 0.6rem;
+}
+
+.toc ul {
+  list-style: none;
+  border-left: 1px solid var(--border);
+  padding-left: 0;
+}
+
+.toc li {
+  padding: 0;
+}
+
+.toc li a {
+  display: block;
+  padding: 0.3rem 0.75rem;
+  margin-left: -1px;
+  color: var(--text-muted);
+  text-decoration: none;
+  border-left: 1px solid transparent;
+  line-height: 1.45;
+  transition: color var(--transition-duration), border-color var(--transition-duration);
+}
+
+.toc li a:hover {
+  color: var(--text);
+  border-left-color: var(--accent);
+}
+
+.toc-3 a { padding-left: 1.5rem; font-size: 0.78rem; }
+
+@media (max-width: 1100px) {
+  .toc { display: none; }
+}
