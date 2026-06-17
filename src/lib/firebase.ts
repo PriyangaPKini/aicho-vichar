@@ -8,6 +8,7 @@ import {
   type Auth,
   type User,
 } from 'firebase/auth';
+import { logClientError } from './logger';
 import {
   getFirestore,
   addDoc,
@@ -32,9 +33,19 @@ let app: FirebaseApp | null = null;
 let auth: Auth | null = null;
 let db: Firestore | null = null;
 
+const userFacingServiceError = 'Something went wrong. Please try again after some time.';
+
+function serviceError(cause: unknown): Error {
+  logClientError({
+    message: 'Firebase service unavailable',
+    context: { cause: String(cause) },
+  });
+  return new Error(userFacingServiceError);
+}
+
 function ensureApp(): FirebaseApp {
-  if (!config.apiKey) {
-    throw new Error('Firebase env vars are not set. See .env.example.');
+  if (!config.apiKey || !config.authDomain || !config.projectId || !config.appId) {
+    throw serviceError('Firebase env vars are not set. See .env.example.');
   }
   if (!app) {
     app = getApps().length ? getApp() : initializeApp(config);
@@ -63,7 +74,16 @@ export async function signOut(): Promise<void> {
 }
 
 export function onUserChange(cb: (user: User | null) => void): () => void {
-  return onAuthStateChanged(ensure(), cb);
+  try {
+    return onAuthStateChanged(ensure(), cb);
+  } catch (err) {
+    logClientError({
+      message: 'Firebase auth listener failed',
+      context: { error: (err as Error)?.message ?? String(err) },
+    });
+    cb(null);
+    return () => {};
+  }
 }
 
 export type Comment = {
@@ -100,19 +120,33 @@ export function subscribeToComments(
   cb: (comments: Comment[]) => void,
   onError?: (err: Error) => void,
 ): () => void {
-  const q = query(
-    collection(ensureDb(), 'comments'),
-    where('postSlug', '==', postSlug),
-    orderBy('createdAt', 'asc'),
-  );
+  let q;
+  try {
+    q = query(
+      collection(ensureDb(), 'comments'),
+      where('postSlug', '==', postSlug),
+      orderBy('createdAt', 'asc'),
+    );
+  } catch (err) {
+    logClientError({
+      message: 'Comments subscription setup failed',
+      context: { postSlug, error: (err as Error)?.message ?? String(err) },
+    });
+    onError?.(new Error(userFacingServiceError));
+    return () => {};
+  }
+
   return onSnapshot(
     q,
     (snap) => {
       cb(snap.docs.map((d) => ({ id: d.id, ...(d.data() as Omit<Comment, 'id'>) })));
     },
     (err) => {
-      console.error('[comments] subscription error:', err);
-      onError?.(err);
+      logClientError({
+        message: 'Comments subscription failed',
+        context: { postSlug, error: err.message },
+      });
+      onError?.(new Error(userFacingServiceError));
     },
   );
 }
