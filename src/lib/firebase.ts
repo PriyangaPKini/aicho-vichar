@@ -33,19 +33,22 @@ let app: FirebaseApp | null = null;
 let auth: Auth | null = null;
 let db: Firestore | null = null;
 
-const userFacingServiceError = 'Something went wrong. Please try again after some time.';
+export const USER_FACING_SERVICE_ERROR = 'Something went wrong. Please try again after some time.';
 
 function serviceError(cause: unknown): Error {
   logClientError({
     message: 'Firebase service unavailable',
     context: { cause: String(cause) },
   });
-  return new Error(userFacingServiceError);
+  return new Error(USER_FACING_SERVICE_ERROR);
 }
 
 function ensureApp(): FirebaseApp {
   if (!config.apiKey || !config.authDomain || !config.projectId || !config.appId) {
     throw serviceError('Firebase env vars are not set. See .env.example.');
+  }
+  if (config.authDomain.includes('*')) {
+    throw serviceError('Firebase auth domain contains masked characters. Check PUBLIC_FIREBASE_AUTH_DOMAIN.');
   }
   if (!app) {
     app = getApps().length ? getApp() : initializeApp(config);
@@ -64,9 +67,17 @@ function ensureDb(): Firestore {
 }
 
 export async function signInWithGoogle(): Promise<User> {
-  const provider = new GoogleAuthProvider();
-  const result = await signInWithPopup(ensure(), provider);
-  return result.user;
+  try {
+    const provider = new GoogleAuthProvider();
+    const result = await signInWithPopup(ensure(), provider);
+    return result.user;
+  } catch (err) {
+    logClientError({
+      message: 'Google sign-in failed',
+      context: { error: (err as Error)?.message ?? String(err) },
+    });
+    throw new Error(USER_FACING_SERVICE_ERROR);
+  }
 }
 
 export async function signOut(): Promise<void> {
@@ -132,7 +143,7 @@ export function subscribeToComments(
       message: 'Comments subscription setup failed',
       context: { postSlug, error: (err as Error)?.message ?? String(err) },
     });
-    onError?.(new Error(userFacingServiceError));
+    onError?.(new Error(USER_FACING_SERVICE_ERROR));
     return () => {};
   }
 
@@ -146,7 +157,7 @@ export function subscribeToComments(
         message: 'Comments subscription failed',
         context: { postSlug, error: err.message },
       });
-      onError?.(new Error(userFacingServiceError));
+      onError?.(new Error(USER_FACING_SERVICE_ERROR));
     },
   );
 }

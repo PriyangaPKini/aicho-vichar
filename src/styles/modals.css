@@ -47,11 +47,10 @@
 }
 
 .signin-avatar {
-  width: 72px;
-  height: 72px;
-  border-radius: 8px;
-  object-fit: cover;
-  margin-bottom: 1rem;
+  width: 128px;
+  height: auto;
+  border-radius: 12px;
+  margin-bottom: 1.25rem;
 }
 
 .signin-modal h2 {
@@ -60,6 +59,12 @@
   font-weight: 600;
   margin: 0 0 1.75rem;
   letter-spacing: -0.01em;
+}
+
+.signin-modal h2 em {
+  color: var(--gold);
+  font-style: italic;
+  font-weight: 500;
 }
 
 .signin-sub {
