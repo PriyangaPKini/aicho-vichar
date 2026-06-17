@@ -114,6 +114,10 @@
   letter-spacing: 0.06em;
 }
 
+.shelf-item-source {
+  color: var(--text-muted);
+}
+
 
 .shelf-item-text {
   display: flex;
