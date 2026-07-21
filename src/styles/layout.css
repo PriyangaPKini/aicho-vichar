@@ -72,21 +72,26 @@
 /* ── Main ── */
 .main {
   width: 100%;
-  max-width: 720px;
-  margin-top: 0;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 0;
-  padding: 3rem 3rem 3rem;
+  margin: 0;
+  padding: 0;
   flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.main-inner {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 3rem 3rem 3rem;
+}
+
+.main-inner > :last-child {
+  margin-bottom: 0;
 }
 
 
 /* ── Site footer ── */
-.main > :last-child {
-  margin-bottom: 0;
-}
-
 .site-footer {
   margin-top: 0;
   padding: 1rem 1rem 1rem;

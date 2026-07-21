@@ -38,7 +38,9 @@ const shareImageUrl = new URL(image, Astro.site).toString();
   <div class="flash-notice" data-flash-notice hidden></div>
   <SiteHeader currentPath={currentPath} />
   <main class="main">
-    <slot />
+    <div class="main-inner">
+      <slot />
+    </div>
   </main>
   <SiteFooter />
   <script>

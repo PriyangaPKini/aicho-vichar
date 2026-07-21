@@ -16,8 +16,7 @@
     width: max-content;
   }
 
-  .main {
-    margin-top: 0;
+  .main-inner {
     padding: 2rem 1.5rem;
   }
 
