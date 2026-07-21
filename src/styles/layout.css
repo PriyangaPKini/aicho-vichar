@@ -77,15 +77,19 @@
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 0;
-  padding: 3rem 3rem;
+  padding: 3rem 3rem 3rem;
   flex: 1;
 }
 
 
 /* ── Site footer ── */
+.main > :last-child {
+  margin-bottom: 0;
+}
+
 .site-footer {
-  margin-top: 1.5rem;
-  padding: 2rem 1.5rem 1.5rem;
+  margin-top: 0;
+  padding: 1rem 1rem 1rem;
   background: var(--navbar-bg);
   border-top: 1px solid var(--border);
   font-family: var(--font-body);
