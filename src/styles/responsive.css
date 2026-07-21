@@ -23,33 +23,33 @@
   .intro h1 { font-size: 1.7rem; }
 
   .post-item {
-    padding: 0.65rem 0.4rem;
+    padding: 0.6rem 0.35rem;
   }
 
   .post-item-left {
-    gap: 0.55rem;
+    gap: 0.45rem;
     align-items: flex-start;
   }
 
   .shelf-item-date {
-    width: 5.25rem;
-    font-size: 0.72rem;
+    width: 4.75rem;
+    font-size: 0.7rem;
   }
 
   .shelf-item-text .post-item-title {
-    font-size: 1.05rem;
-    line-height: 1.25;
+    font-size: 1rem;
+    line-height: 1.22;
   }
 
   .shelf-item-subtitle {
-    margin-top: 0.35rem;
-    padding-left: 0.55rem;
-    font-size: 0.8rem;
-    line-height: 1.4;
+    margin-top: 0.3rem;
+    padding-left: 0.5rem;
+    font-size: 0.78rem;
+    line-height: 1.35;
   }
 
   .tag {
-    font-size: 0.58rem;
+    font-size: 0.55rem;
   }
 
   .post-navigation {

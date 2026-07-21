@@ -39,7 +39,7 @@
 }
 
 .intro-large h1.home-title {
-  font-size: clamp(1.8rem, 7vw, 5.5rem);
+  font-size: clamp(2rem, 10.5vw, 5rem);
   white-space: nowrap;
 }
 
