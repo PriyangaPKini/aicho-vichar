@@ -38,6 +38,11 @@
   font-size: clamp(3rem, 8vw, 5.5rem);
 }
 
+.intro-large h1.home-title {
+  font-size: clamp(1.8rem, 7vw, 5.5rem);
+  white-space: nowrap;
+}
+
 .shelf-item-text .post-item-title {
   font-family: var(--font-heading);
   font-size: 1.25rem;
