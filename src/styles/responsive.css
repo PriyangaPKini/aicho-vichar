@@ -22,6 +22,36 @@
 
   .intro h1 { font-size: 1.7rem; }
 
+  .post-item {
+    padding: 0.65rem 0.4rem;
+  }
+
+  .post-item-left {
+    gap: 0.55rem;
+    align-items: flex-start;
+  }
+
+  .shelf-item-date {
+    width: 5.25rem;
+    font-size: 0.72rem;
+  }
+
+  .shelf-item-text .post-item-title {
+    font-size: 1.05rem;
+    line-height: 1.25;
+  }
+
+  .shelf-item-subtitle {
+    margin-top: 0.35rem;
+    padding-left: 0.55rem;
+    font-size: 0.8rem;
+    line-height: 1.4;
+  }
+
+  .tag {
+    font-size: 0.58rem;
+  }
+
   .post-navigation {
     grid-template-columns: 1fr;
     gap: 1rem;
