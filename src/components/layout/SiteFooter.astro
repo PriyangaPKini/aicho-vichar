@@ -1,13 +1,14 @@
 ---
 import IconLink from "../ui/IconLink.astro";
 import { SOCIAL_ITEMS } from "../../constants";
+
+const currentYear = new Date().getFullYear();
 ---
 
 <footer class="site-footer">
   <div class="site-footer-inner">
-    <p class="site-footer-brand">
-      <span class="site-footer-title">Aicho <em>Vichar</em></span>
-      <span class="site-footer-tagline">today's thought · a small journal</span>
+    <p class="site-footer-license">
+      © {currentYear} Priyanga P Kini
     </p>
     <div class="site-footer-socials">
       {SOCIAL_ITEMS.map((item) => (
