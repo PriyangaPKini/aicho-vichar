@@ -12,11 +12,9 @@
   white-space: nowrap;
 }
 
-.intro h1 em,
-.intro h1 i {
+.title-accent {
   color: var(--gold);
-  font-style: italic;
-  font-weight: 500;
+  font-style: normal;
 }
 
 .intro h1.page-title {

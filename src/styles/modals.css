@@ -61,12 +61,6 @@
   letter-spacing: -0.01em;
 }
 
-.signin-modal h2 em {
-  color: var(--gold);
-  font-style: italic;
-  font-weight: 500;
-}
-
 .signin-sub {
   color: var(--text-muted);
   font-size: 0.9rem;
