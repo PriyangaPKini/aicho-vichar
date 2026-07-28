@@ -45,6 +45,7 @@
   margin-bottom: 1.25rem;
 }
 
+
 .intro-large h1.home-title {
   font-size: clamp(2rem, 10.5vw, 5rem);
   white-space: nowrap;
@@ -68,6 +69,10 @@
 
 
 /* ── Prose (blog/book posts) ── */
+.prose {
+  font-size: 1.05rem;
+}
+
 .prose h1, .prose h2, .prose h3 {
   font-family: var(--font-heading);
   margin: 1.5rem 0 0.75rem;
@@ -81,15 +86,15 @@
 .prose ul, .prose ol { margin: 1rem 0; padding-left: 1.5rem; }
 .prose li { margin-bottom: 0.4rem; }
 .prose a {
-  color: var(--gold);
+  color: var(--text);
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-decoration-color: var(--gold);
   text-underline-offset: 3px;
   border-radius: 2px;
-  transition: background-color var(--transition-duration), color var(--transition-duration);
+  transition: color var(--transition-duration);
 }
-.prose a:hover { background: var(--accent-light-bg); }
+.prose a:hover { color: var(--text-muted); }
 .prose blockquote {
   border-left: 3px solid var(--accent);
   padding: 0.5rem 1rem;

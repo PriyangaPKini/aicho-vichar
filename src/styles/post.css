@@ -9,9 +9,47 @@
 }
 
 .post-canonical a {
-  color: var(--gold);
+  color: var(--text);
   text-decoration: underline;
   text-decoration-color: var(--gold);
   text-underline-offset: 3px;
+  transition: color var(--transition-duration);
+}
+
+.post-share {
+  margin: 4rem 0 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+  color: var(--text);
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+.post-share p {
+  margin-bottom: 1rem;
+}
+
+.post-share ul {
+  margin: 0;
+  padding-left: 2rem;
+}
+
+.post-share li + li {
+  margin-top: 0.5rem;
+}
+
+.post-share a {
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--gold);
+  text-underline-offset: 3px;
+  border-radius: 2px;
+  transition: color var(--transition-duration);
+}
+
+.post-share a:hover,
+.post-canonical a:hover {
+  color: var(--text-muted);
 }
 

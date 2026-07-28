@@ -77,6 +77,16 @@
   opacity: 1;
 }
 
+.site-header-icon-link {
+  width: 34px;
+  padding: 0.25rem;
+}
+
+.site-header-icon-link svg {
+  width: 18px;
+  height: 18px;
+}
+
 .flash-notice {
   position: fixed;
   top: 1rem;

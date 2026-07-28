@@ -1,11 +1,9 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import SignInModal from '../../components/auth/SignInModal.astro';
-import SignUpModal from '../../components/auth/SignUpModal.astro';
-import Comments from '../../components/comments/Comments.astro';
 import CanonicalCallout from '../../components/blog/CanonicalCallout.astro';
 import PostHeader from '../../components/blog/PostHeader.astro';
 import PostNavigation from '../../components/blog/PostNavigation.astro';
+import PostShare from '../../components/blog/PostShare.astro';
 import { render } from 'astro:content';
 import { getSortedCollection } from '../../lib/content';
 
@@ -24,6 +22,7 @@ export async function getStaticPaths() {
 
 const { post, prev, next } = Astro.props;
 const { Content } = await render(post);
+const postUrl = new URL(`/blog/${post.id}/`, Astro.site).toString();
 ---
 
 <BaseLayout title={`${post.data.title} — Priyanga P Kini`} description={post.data.description}>
@@ -38,10 +37,13 @@ const { Content } = await render(post);
     <CanonicalCallout url={post.data.canonicalUrl} />
   </article>
 
-  <Comments postSlug={post.id} />
-
-  <SignInModal />
-  <SignUpModal />
+  <PostShare title={post.data.title} url={postUrl} />
 
   <PostNavigation prev={prev} next={next} />
 </BaseLayout>
+
+<style is:global>
+  .main-inner {
+    padding: 6rem 2rem 1.5rem;
+  }
+</style>
