@@ -1,19 +1,16 @@
----
-const { currentPath = "" } = Astro.props;
-const isActive = (path: string) =>
-  currentPath === path || currentPath === `${path}/`;
----
-
 <header class="site-header">
   <div class="site-header-inner">
+    <a href="/" class="site-header-brand" aria-label="Priyanga P Kini home">
+      Priyanga P Kini
+    </a>
     <nav class="site-header-nav" aria-label="Primary navigation">
-      <a href="/" class={`site-header-link site-header-home${isActive("/") ? " is-active" : ""}`} title="Home" aria-label="Home">
-        <svg width="20" height="20" aria-hidden="true">
-          <use href="#icon-home" />
+      <a href="/blog" class="site-header-link">Blogs</a>
+      <a href="/shelf" class="site-header-link">Shelf</a>
+      <a href="/rss.xml" class="site-header-link site-header-icon-link" title="RSS feed" aria-label="RSS feed">
+        <svg width="18" height="18" aria-hidden="true">
+          <use href="#icon-rss" />
         </svg>
       </a>
-      <a href="/blog" class={`site-header-link${isActive("/blog") ? " is-active" : ""}`}>Blogs</a>
-      <a href="/shelf" class={`site-header-link${isActive("/shelf") ? " is-active" : ""}`}>Shelf</a>
     </nav>
   </div>
 </header>

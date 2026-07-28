@@ -21,9 +21,14 @@
   font-family: var(--font-heading);
   font-weight: 600;
   font-style: normal;
+  margin-bottom: 1rem;
   white-space: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.intro-post {
+  text-align: center;
 }
 
 .intro-post h1.page-title {
@@ -31,10 +36,15 @@
   font-variation-settings: "opsz" 36, "SOFT" 50;
 }
 
-.intro-shelf h1.page-title,
-.intro-large h1.page-title {
+.intro-large h1.page-title,
+.intro-listing h1.page-title {
   font-size: clamp(3rem, 8vw, 5.5rem);
 }
+
+.intro-listing {
+  margin-bottom: 1.25rem;
+}
+
 
 .intro-large h1.home-title {
   font-size: clamp(2rem, 10.5vw, 5rem);
@@ -59,6 +69,10 @@
 
 
 /* ── Prose (blog/book posts) ── */
+.prose {
+  font-size: 1.05rem;
+}
+
 .prose h1, .prose h2, .prose h3 {
   font-family: var(--font-heading);
   margin: 1.5rem 0 0.75rem;
@@ -72,15 +86,15 @@
 .prose ul, .prose ol { margin: 1rem 0; padding-left: 1.5rem; }
 .prose li { margin-bottom: 0.4rem; }
 .prose a {
-  color: var(--gold);
+  color: var(--text);
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-decoration-color: var(--gold);
   text-underline-offset: 3px;
   border-radius: 2px;
-  transition: background-color var(--transition-duration), color var(--transition-duration);
+  transition: color var(--transition-duration);
 }
-.prose a:hover { background: var(--accent-light-bg); }
+.prose a:hover { color: var(--text-muted); }
 .prose blockquote {
   border-left: 3px solid var(--accent);
   padding: 0.5rem 1rem;
@@ -133,7 +147,7 @@
   font-size: 2.6rem;
   font-weight: 600;
   font-style: normal;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   letter-spacing: -0.01em;
   line-height: 1.15;
   -webkit-font-smoothing: antialiased;

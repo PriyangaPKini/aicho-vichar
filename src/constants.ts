@@ -1,3 +1,7 @@
+// Site metadata
+export const SITE_TITLE = 'Priyanga P Kini';
+export const SITE_DESCRIPTION = "an engineer's journal";
+
 // Social media links
 export const SOCIAL_ITEMS = [
   { href: "https://github.com/PriyangaPKini", label: "GitHub", icon: "icon-github", color: "var(--text)" },

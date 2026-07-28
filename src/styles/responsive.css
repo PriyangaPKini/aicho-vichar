@@ -8,8 +8,18 @@
 
   .site-header-inner {
     flex-direction: row;
-    justify-content: flex-end;
+    justify-content: space-between;
     gap: 0.75rem;
+  }
+
+  .site-header-brand {
+    font-size: 1.05rem;
+    letter-spacing: 0.04em;
+  }
+
+  .site-header-link {
+    font-size: 0.9rem;
+    padding: 0.25rem 0.35rem;
   }
 
   .site-header-nav {
