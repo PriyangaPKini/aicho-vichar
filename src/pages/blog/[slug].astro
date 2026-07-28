@@ -6,7 +6,6 @@ import Comments from '../../components/comments/Comments.astro';
 import CanonicalCallout from '../../components/blog/CanonicalCallout.astro';
 import PostHeader from '../../components/blog/PostHeader.astro';
 import PostNavigation from '../../components/blog/PostNavigation.astro';
-import TableOfContents from '../../components/blog/TableOfContents.astro';
 import { render } from 'astro:content';
 import { getSortedCollection } from '../../lib/content';
 
@@ -24,12 +23,10 @@ export async function getStaticPaths() {
 }
 
 const { post, prev, next } = Astro.props;
-const { Content, headings } = await render(post);
+const { Content } = await render(post);
 ---
 
 <BaseLayout title={`${post.data.title} — Priyanga P Kini`} description={post.data.description}>
-  <TableOfContents headings={headings} />
-
   <PostHeader
     title={post.data.title}
     date={post.data.date}
