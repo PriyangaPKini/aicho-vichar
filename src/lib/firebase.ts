@@ -2,7 +2,7 @@ import { initializeApp, getApps, getApp, type FirebaseApp } from 'firebase/app';
 import {
   getAuth,
   GoogleAuthProvider,
-  signInWithPopup,
+  signInWithRedirect,
   signOut as fbSignOut,
   onAuthStateChanged,
   type Auth,
@@ -66,11 +66,10 @@ function ensureDb(): Firestore {
   return db;
 }
 
-export async function signInWithGoogle(): Promise<User> {
+export async function signInWithGoogle(): Promise<void> {
   try {
     const provider = new GoogleAuthProvider();
-    const result = await signInWithPopup(ensure(), provider);
-    return result.user;
+    await signInWithRedirect(ensure(), provider);
   } catch (err) {
     logClientError({
       message: 'Google sign-in failed',
