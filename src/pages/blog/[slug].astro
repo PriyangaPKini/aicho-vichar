@@ -23,9 +23,10 @@ export async function getStaticPaths() {
 const { post, prev, next } = Astro.props;
 const { Content } = await render(post);
 const postUrl = new URL(`/blog/${post.id}/`, Astro.site).toString();
+const thumbnail = `/images/blog/${post.id}/thumbnail.png`;
 ---
 
-<BaseLayout title={`${post.data.title} — Priyanga P Kini`} description={post.data.description}>
+<BaseLayout title={`${post.data.title} — Priyanga P Kini`} description={post.data.description} image={thumbnail}>
   <PostHeader
     title={post.data.title}
     date={post.data.date}
