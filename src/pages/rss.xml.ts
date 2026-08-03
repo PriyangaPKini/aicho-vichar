@@ -12,9 +12,23 @@ const escapeXml = (value: string) =>
 
 const cdata = (value: string) => `<![CDATA[ ${value.replaceAll(']]>', ']]]]><![CDATA[>')} ]]>`;
 
+const rssImagePath = (path: string) => {
+  if (path.startsWith('images/blog/sandboxing-ai-agents/') && path.endsWith('.svg')) {
+    return path.replace(/\.svg$/, '.png');
+  }
+
+  return path;
+};
+
+const styleTables = (html: string) =>
+  html
+    .replaceAll('<table>', '<table style="width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.95rem;">')
+    .replaceAll('<th>', '<th style="padding: 0.6rem 0.9rem; text-align: left; border-bottom: 2px solid #d49423; color: #d49423; background: rgba(212, 148, 35, 0.06);">')
+    .replaceAll('<td>', '<td style="padding: 0.6rem 0.9rem; text-align: left; border-bottom: 1px solid #d8ccb4; vertical-align: top;">');
+
 const absolutizeUrls = (html: string, siteUrl: string) =>
-  html.replace(/\b(src|href)="\/(?!\/)([^"]*)"/g, (_, attr: string, path: string) => {
-    return `${attr}="${new URL(`/${path}`, siteUrl).toString()}"`;
+  styleTables(html).replace(/\b(src|href)="\/(?!\/)([^"]*)"/g, (_, attr: string, path: string) => {
+    return `${attr}="${new URL(`/${rssImagePath(path)}`, siteUrl).toString()}"`;
   });
 
 export const GET: APIRoute = async ({ site }) => {
