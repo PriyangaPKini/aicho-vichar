@@ -13,23 +13,47 @@ const escapeXml = (value: string) =>
 const cdata = (value: string) => `<![CDATA[ ${value.replaceAll(']]>', ']]]]><![CDATA[>')} ]]>`;
 
 const rssImagePath = (path: string) => {
-  if (path.startsWith('images/blog/sandboxing-ai-agents/') && path.endsWith('.svg')) {
+  if (path.startsWith('images/blog/') && path.endsWith('.svg')) {
     return path.replace(/\.svg$/, '.png');
   }
 
   return path;
 };
 
-const styleTables = (html: string) =>
+const imageAlt = (attrs: string) => {
+  const match = attrs.match(/\balt="([^"]*)"/);
+  return match?.[1] ?? '';
+};
+
+const addImageImportAttrs = (attrs: string) => {
+  const withClass = /\bclass=/.test(attrs) ? attrs : `${attrs} class="kg-image"`;
+  return /\bloading=/.test(withClass) ? withClass : `${withClass} loading="lazy"`;
+};
+
+const formatImages = (html: string) =>
   html
-    .replaceAll('<table>', '<table style="width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.95rem;">')
-    .replaceAll('<th>', '<th style="padding: 0.6rem 0.9rem; text-align: left; border-bottom: 2px solid #d49423; color: #d49423; background: rgba(212, 148, 35, 0.06);">')
-    .replaceAll('<td>', '<td style="padding: 0.6rem 0.9rem; text-align: left; border-bottom: 1px solid #d8ccb4; vertical-align: top;">');
+    .replace(/<p><img\s+([^>]*)><\/p>/g, (_, attrs: string) => {
+      const alt = imageAlt(attrs);
+      const caption = alt
+        ? `<figcaption><span style="white-space: pre-wrap;">${escapeXml(alt)}</span></figcaption>`
+        : '';
+
+      return `<figure class="kg-card kg-image-card${alt ? ' kg-card-hascaption' : ''}"><img ${addImageImportAttrs(attrs)}>${caption}</figure>`;
+    })
+    .replace(/<img\s+([^>]*)>/g, (_, attrs: string) => `<img ${addImageImportAttrs(attrs)}>`);
+
+const replaceTablesForImport = (html: string, siteUrl: string) =>
+  html.replace(/<table>[\s\S]*?<\/table>/g, (table) => {
+    if (!table.includes('LLM pipeline')) return table;
+
+    const imageUrl = new URL('/images/blog/evals-before-prompts-building-an-llm-ocr-for-kyc/metrics-table.png', siteUrl).toString();
+    return `<figure class="kg-card kg-image-card kg-card-hascaption"><img src="${imageUrl}" alt="Table comparing third-party and LLM pipeline accuracy, latency, and cost metrics." class="kg-image" loading="lazy" width="1200" height="430"><figcaption><span style="white-space: pre-wrap;">Third-party vs LLM pipeline metrics.</span></figcaption></figure>`;
+  });
 
 const absolutizeUrls = (html: string, siteUrl: string) =>
-  styleTables(html).replace(/\b(src|href)="\/(?!\/)([^"]*)"/g, (_, attr: string, path: string) => {
+  formatImages(replaceTablesForImport(html, siteUrl).replace(/\b(src|href)="\/(?!\/)([^"]*)"/g, (_, attr: string, path: string) => {
     return `${attr}="${new URL(`/${rssImagePath(path)}`, siteUrl).toString()}"`;
-  });
+  }));
 
 export const GET: APIRoute = async ({ site }) => {
   const posts = await getSortedCollection('blog');
@@ -42,6 +66,7 @@ export const GET: APIRoute = async ({ site }) => {
     const postUrl = new URL(`/blog/${post.id}/`, siteUrl).toString();
     const description = post.data.description ?? '';
     const content = absolutizeUrls(post.rendered?.html ?? '', siteUrl);
+    const thumbnailUrl = new URL(`/images/blog/${post.id}/thumbnail.png`, siteUrl).toString();
 
     return `
     <item>
@@ -51,6 +76,8 @@ export const GET: APIRoute = async ({ site }) => {
       <guid isPermaLink="false">${escapeXml(post.id)}</guid>
       <dc:creator>${cdata(SITE_TITLE)}</dc:creator>
       <pubDate>${new Date(post.data.date).toUTCString()}</pubDate>
+      ${thumbnailUrl ? `<media:content url="${escapeXml(thumbnailUrl)}" medium="image" />` : ''}
+      ${thumbnailUrl ? `<media:thumbnail url="${escapeXml(thumbnailUrl)}" />` : ''}
       <content:encoded>${cdata(content)}</content:encoded>
     </item>`;
   }).join('');
