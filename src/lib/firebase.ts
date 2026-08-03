@@ -2,6 +2,7 @@ import { initializeApp, getApps, getApp, type FirebaseApp } from 'firebase/app';
 import {
   getAuth,
   GoogleAuthProvider,
+  getRedirectResult,
   signInWithRedirect,
   signOut as fbSignOut,
   onAuthStateChanged,
@@ -32,6 +33,7 @@ const config = {
 let app: FirebaseApp | null = null;
 let auth: Auth | null = null;
 let db: Firestore | null = null;
+let redirectResultHandled: Promise<void> | null = null;
 
 export const USER_FACING_SERVICE_ERROR = 'Something went wrong. Please try again after some time.';
 
@@ -83,9 +85,26 @@ export async function signOut(): Promise<void> {
   await fbSignOut(ensure());
 }
 
+function handleRedirectResult(): Promise<void> {
+  if (!redirectResultHandled) {
+    redirectResultHandled = getRedirectResult(ensure())
+      .then(() => undefined)
+      .catch((err) => {
+        logClientError({
+          message: 'Google redirect sign-in failed',
+          context: { error: (err as Error)?.message ?? String(err) },
+        });
+      });
+  }
+
+  return redirectResultHandled;
+}
+
 export function onUserChange(cb: (user: User | null) => void): () => void {
   try {
-    return onAuthStateChanged(ensure(), cb);
+    const auth = ensure();
+    void handleRedirectResult();
+    return onAuthStateChanged(auth, cb);
   } catch (err) {
     logClientError({
       message: 'Firebase auth listener failed',
