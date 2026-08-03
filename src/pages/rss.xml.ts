@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../constants';
 import { getSortedCollection } from '../lib/content';
+import { hostnameFromUrl } from '../lib/url';
 
 const escapeXml = (value: string) =>
   value
@@ -65,7 +66,10 @@ export const GET: APIRoute = async ({ site }) => {
   const items = posts.map((post) => {
     const postUrl = new URL(`/blog/${post.id}/`, siteUrl).toString();
     const description = post.data.description ?? '';
-    const content = absolutizeUrls(post.rendered?.html ?? '', siteUrl);
+    const canonicalCallout = post.data.canonicalUrl
+      ? `<blockquote><p>Originally published on <a href="${escapeXml(post.data.canonicalUrl)}">${escapeXml(hostnameFromUrl(post.data.canonicalUrl))}</a>.</p></blockquote>`
+      : '';
+    const content = absolutizeUrls(`${post.rendered?.html ?? ''}${canonicalCallout}`, siteUrl);
     const thumbnailUrl = new URL(`/images/blog/${post.id}/thumbnail.png`, siteUrl).toString();
 
     return `
