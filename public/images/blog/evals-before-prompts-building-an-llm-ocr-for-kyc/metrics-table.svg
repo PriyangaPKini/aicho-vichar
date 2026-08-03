@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="430" viewBox="0 0 1200 430" role="img" aria-labelledby="title desc">
+  <title id="title">KYC extraction metrics table</title>
+  <desc id="desc">A table comparing third-party and LLM pipeline metrics: accuracy 92%, latency p99 7.9 seconds, and cost per 1M documents 1000 dollars.</desc>
+  <rect width="1200" height="430" rx="24" fill="#faf6ec"/>
+  <g transform="translate(80 70)">
+    <rect width="1040" height="290" rx="14" fill="#f5efe1" stroke="#d8ccb4" stroke-width="2"/>
+    <rect width="1040" height="72" rx="14" fill="rgba(212, 148, 35, 0.10)"/>
+    <path d="M0 72H1040" stroke="#d49423" stroke-width="3"/>
+    <path d="M420 0V290M730 0V290" stroke="#d8ccb4" stroke-width="2"/>
+    <path d="M0 145H1040M0 218H1040" stroke="#d8ccb4" stroke-width="2"/>
+
+    <text x="32" y="46" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="700" fill="#d49423">Metric</text>
+    <text x="452" y="46" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="700" fill="#d49423">Third-party</text>
+    <text x="762" y="46" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="700" fill="#d49423">LLM pipeline</text>
+
+    <text x="32" y="117" font-family="Inter, Arial, sans-serif" font-size="26" fill="#1a1a1a">Accuracy (golden set)</text>
+    <text x="452" y="117" font-family="Inter, Arial, sans-serif" font-size="26" fill="#1a1a1a">baseline</text>
+    <text x="762" y="117" font-family="Inter, Arial, sans-serif" font-size="26" fill="#1a1a1a">92%</text>
+
+    <text x="32" y="190" font-family="Inter, Arial, sans-serif" font-size="26" fill="#1a1a1a">Latency p99</text>
+    <text x="452" y="190" font-family="Inter, Arial, sans-serif" font-size="26" fill="#1a1a1a">~10s</text>
+    <text x="762" y="190" font-family="Inter, Arial, sans-serif" font-size="26" fill="#1a1a1a">7.9s</text>
+
+    <text x="32" y="263" font-family="Inter, Arial, sans-serif" font-size="26" fill="#1a1a1a">Cost (per 1M docs)</text>
+    <text x="452" y="263" font-family="Inter, Arial, sans-serif" font-size="26" fill="#1a1a1a">$10,000</text>
+    <text x="762" y="263" font-family="Inter, Arial, sans-serif" font-size="26" fill="#1a1a1a">$1,000</text>
+  </g>
+</svg>
