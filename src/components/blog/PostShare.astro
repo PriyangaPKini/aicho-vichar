@@ -1,19 +1,31 @@
 ---
 interface Props {
-  title: string;
-  url: string;
+  slug: string;
 }
 
-const { title, url } = Astro.props;
-const hackerNewsUrl = new URL('https://news.ycombinator.com/submitlink');
-hackerNewsUrl.searchParams.set('u', url);
-hackerNewsUrl.searchParams.set('t', title);
+const { slug } = Astro.props;
+const commentsUrl = `https://priyangapkini.substack.com/p/${slug}/comments`;
+const subscribeUrl = 'https://priyangapkini.substack.com/subscribe';
 ---
 
 <section class="post-share" aria-label="Share and subscribe">
-  <p>If you find this helpful and interesting,</p>
-  <ul>
-    <li>share it on <a href={hackerNewsUrl.toString()} target="_blank" rel="noopener noreferrer">HackerNews</a></li>
-    <li>subscribe to my <a href="/rss.xml">RSS feed</a> and get notified the moment I publish a new one.</li>
-  </ul>
+  <p class="post-share-prompt">If you enjoyed this, let's keep in touch.</p>
+  <div class="post-share-actions">
+    <a
+      class="post-share-btn post-share-btn--secondary"
+      href={commentsUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      Start a conversation
+    </a>
+    <a
+      class="post-share-btn post-share-btn--primary"
+      href={subscribeUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      Subscribe on Substack
+    </a>
+  </div>
 </section>
