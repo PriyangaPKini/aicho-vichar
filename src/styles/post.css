@@ -51,7 +51,7 @@
 
 .post-share-btn--secondary {
   background-color: transparent;
-  color: var(--text);
+  color: var(--accent);
 }
 
 .post-share-btn--secondary:hover {
