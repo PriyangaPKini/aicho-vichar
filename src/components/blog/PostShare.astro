@@ -1,4 +1,6 @@
 ---
+import ExternalLink from '../ui/ExternalLink.astro';
+
 interface Props {
   slug: string;
 }
@@ -11,11 +13,11 @@ const subscribeUrl = 'https://priyangapkini.substack.com/subscribe';
 <section class="post-share" aria-label="Share and subscribe">
   <p class="post-share-prompt">If you enjoyed this, let's keep in touch.</p>
   <div class="post-share-actions">
-    <a class="post-share-btn post-share-btn--secondary" href={commentsUrl} target="_blank" rel="noopener noreferrer">
+    <ExternalLink href={commentsUrl} class="post-share-btn post-share-btn--secondary">
       Start a conversation
-    </a>
-    <a class="post-share-btn post-share-btn--primary" href={subscribeUrl} target="_blank" rel="noopener noreferrer">
+    </ExternalLink>
+    <ExternalLink href={subscribeUrl} class="post-share-btn post-share-btn--primary">
       Subscribe on Substack
-    </a>
+    </ExternalLink>
   </div>
 </section>
