@@ -121,7 +121,8 @@ npm run astro …      # raw Astro CLI (e.g. `astro check`)
 
 - Posts that originated elsewhere (e.g. the nilenso blog) still get a real page on this site — they are not redirected. The full body lives in `src/content/blog/<slug>.md` and the post page renders normally.
 - Setting `canonicalUrl` triggers an "Originally published on …" callout at the end of the article. The source label is derived from the URL hostname (`new URL(canonicalUrl).hostname.replace(/^www\./, '')`), so any publisher works.
-- When cross-posting, self-host the assets under `public/images/blog/<slug>/` rather than hot-linking from the source.
+- When cross-posting, self-host the assets under `public/images/blog/<post-id>/` rather than hot-linking from the source. `<post-id>` is the markdown filename without its extension (e.g. `2026-06-25-sandboxing-megasthenes`) — one folder per post holding every image it uses.
+- Each post's social card lives in that same folder as `thumbnail.png`. The path is derived from the post id, not from frontmatter, so nothing has to be configured per post: `blog/[slug].astro` uses it for `og:image` / `twitter:image`, and `rss.xml.ts` for `<media:content>`, `<media:thumbnail>`, and `<enclosure>`. Keep the editable `thumbnail.svg` source beside it.
 
 ## Comments & auth
 

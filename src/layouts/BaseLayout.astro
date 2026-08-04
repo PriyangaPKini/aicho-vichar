@@ -2,13 +2,13 @@
 import Icons from '../components/ui/Icons.astro';
 import SiteHeader from '../components/layout/SiteHeader.astro';
 import SiteFooter from '../components/layout/SiteFooter.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../constants';
+import { SITE_DESCRIPTION, SITE_IMAGE, SITE_TITLE } from '../constants';
 import '../styles/global.css';
 
 const {
   title = SITE_TITLE,
   description = SITE_DESCRIPTION,
-  image = "/gallery/holiday-in-munnar.jpeg",
+  image = SITE_IMAGE,
 } = Astro.props;
 const currentPath = Astro.url.pathname;
 const canonicalUrl = new URL(currentPath, Astro.site).toString();

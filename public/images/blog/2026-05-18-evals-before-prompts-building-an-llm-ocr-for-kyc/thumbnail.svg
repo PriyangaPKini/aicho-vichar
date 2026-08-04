@@ -1,0 +1,86 @@
+<svg viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Evals before prompts: building an LLM OCR for KYC">
+  <defs>
+    <marker id="e-gold" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#d49423" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <marker id="e-ink" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#1a1a1a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <style>
+      .kicker { font-family: Inter, Arial, sans-serif; font-size: 16px; font-weight: 600; letter-spacing: 0.18em; }
+      .title  { font-family: Fraunces, Charter, Georgia, serif; font-size: 46px; font-weight: 600; }
+      .title-em { font-family: Fraunces, Charter, Georgia, serif; font-size: 46px; font-weight: 600; font-style: italic; }
+      .byline { font-family: Inter, Arial, sans-serif; font-size: 17px; font-weight: 600; letter-spacing: 0.14em; }
+      .node   { font-family: Charter, Georgia, serif; font-size: 17px; font-weight: 700; }
+      .note   { font-family: Charter, Georgia, serif; font-size: 13px; font-style: italic; }
+      .field  { font-family: Inter, Arial, sans-serif; font-size: 12px; }
+      .tag    { font-family: Inter, Arial, sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 0.12em; }
+      .score  { font-family: Fraunces, Charter, Georgia, serif; font-size: 30px; font-weight: 700; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="630" fill="#faf6ec"/>
+  <rect x="26" y="26" width="1148" height="578" rx="18" fill="none" stroke="#d8ccb4" stroke-width="1.5"/>
+
+  <!-- ── Illustration: golden dataset → run → scored ── -->
+  <g>
+    <!-- golden dataset: stacked ID cards -->
+    <text class="tag" x="96" y="82" fill="#d49423">GOLDEN DATASET</text>
+    <rect x="112" y="112" width="164" height="104" rx="6" fill="#f3ecdb" stroke="#d8ccb4" stroke-width="1.2"/>
+    <rect x="104" y="102" width="164" height="104" rx="6" fill="#f5efe1" stroke="#d8ccb4" stroke-width="1.2"/>
+    <rect x="96" y="92" width="164" height="104" rx="6" fill="#faf6ec" stroke="#1a1a1a" stroke-width="1.3"/>
+    <rect x="110" y="108" width="34" height="42" rx="4" fill="#f3ecdb" stroke="#1a1a1a" stroke-width="1"/>
+    <circle cx="127" cy="122" r="7" fill="none" stroke="#6b6258" stroke-width="1.1"/>
+    <path d="M116 144 a 11 11 0 0 1 22 0" fill="none" stroke="#6b6258" stroke-width="1.1"/>
+    <line x1="156" y1="116" x2="246" y2="116" stroke="#1a1a1a" stroke-width="1.4"/>
+    <line x1="156" y1="132" x2="228" y2="132" stroke="#d8ccb4" stroke-width="3"/>
+    <line x1="156" y1="146" x2="240" y2="146" stroke="#d8ccb4" stroke-width="3"/>
+    <line x1="110" y1="166" x2="246" y2="166" stroke="#d8ccb4" stroke-width="3"/>
+    <line x1="110" y1="180" x2="200" y2="180" stroke="#d8ccb4" stroke-width="3"/>
+    <text class="note" x="96" y="240" fill="#6b6258">50 documents per type, human-verified</text>
+
+    <path d="M290 148 H 356" fill="none" stroke="#1a1a1a" stroke-width="1.8" marker-end="url(#e-ink)"/>
+
+    <!-- the model under test -->
+    <rect x="366" y="106" width="180" height="84" rx="6" fill="#f5efe1" stroke="#1a1a1a" stroke-width="1.3"/>
+    <text class="node" x="456" y="140" text-anchor="middle" fill="#1a1a1a">LLM extraction</text>
+    <text class="note" x="456" y="164" text-anchor="middle" fill="#6b6258">prompt under test</text>
+
+    <path d="M546 148 H 612" fill="none" stroke="#1a1a1a" stroke-width="1.8" marker-end="url(#e-ink)"/>
+
+    <!-- scorecard -->
+    <rect x="622" y="80" width="300" height="176" rx="6" fill="#faf6ec" stroke="#1a1a1a" stroke-width="1.3"/>
+    <text class="tag" x="644" y="108" fill="#6b6258">SCORED AGAINST GROUND TRUTH</text>
+
+    <path d="M646 128 l 9 10 l 18 -20" fill="none" stroke="#d49423" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <text class="field" x="686" y="134" fill="#1a1a1a">name</text>
+    <line x1="740" y1="130" x2="900" y2="130" stroke="#f3ecdb" stroke-width="2"/>
+
+    <path d="M646 160 l 9 10 l 18 -20" fill="none" stroke="#d49423" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <text class="field" x="686" y="166" fill="#1a1a1a">date of birth</text>
+    <line x1="770" y1="162" x2="900" y2="162" stroke="#f3ecdb" stroke-width="2"/>
+
+    <path d="M646 184 l 22 22 M668 184 l -22 22" stroke="#8b2c2c" stroke-width="3" stroke-linecap="round"/>
+    <text class="field" x="686" y="200" fill="#8b2c2c">id number &#8212; hallucinated</text>
+
+    <path d="M646 218 l 22 22 M668 218 l -22 22" stroke="#8b2c2c" stroke-width="3" stroke-linecap="round"/>
+    <text class="field" x="686" y="234" fill="#8b2c2c">address &#8212; omitted</text>
+
+    <!-- the number you can defend -->
+    <rect x="952" y="98" width="152" height="140" rx="70" fill="#faf6ec" stroke="#d49423" stroke-width="2"/>
+    <text class="score" x="1028" y="164" text-anchor="middle" fill="#d49423">94%</text>
+    <text class="note" x="1028" y="190" text-anchor="middle" fill="#6b6258">one defensible</text>
+    <text class="note" x="1028" y="208" text-anchor="middle" fill="#6b6258">number</text>
+
+    <!-- iterate loop back to the prompt -->
+    <path d="M1028 244 V 292 H 456 V 202" fill="none" stroke="#d49423" stroke-width="2.4" marker-end="url(#e-gold)"/>
+    <text class="note" x="742" y="284" text-anchor="middle" fill="#d49423">the failure list drives the next prompt</text>
+  </g>
+
+  <line x1="96" y1="352" x2="1104" y2="352" stroke="#d8ccb4" stroke-width="1.5"/>
+
+  <!-- ── Type ── -->
+  <text class="title"    x="96" y="445" fill="#1a1a1a">Evals before prompts:</text>
+  <text class="title-em" x="96" y="499" fill="#d49423">building an LLM OCR for KYC</text>
+  <text class="byline" x="96" y="551" fill="#6b6258">PRIYANGA P KINI</text>
+</svg>

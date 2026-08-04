@@ -12,7 +12,7 @@ The previous flow took 3-4 days. The goal was same-day onboarding. The verificat
 
 In the Temporal framework, the individual tasks are modelled as [Activities](https://docs.temporal.io/activities), and the orchestration logic as the [Workflow](https://docs.temporal.io/workflows).
 
-![Document verification workflow](/images/blog/temporal-anti-pattern-dont-treat-expected-failures-as-exceptions/document-verification-workflow.svg)
+![Document verification workflow](/images/blog/2026-04-30-temporal-anti-pattern-dont-treat-expected-failures-as-exceptions/document-verification-workflow.svg)
 
 Temporal uses exceptions as its primary mechanism for handling failures, so we initially modelled our validation Activity the same way:
 

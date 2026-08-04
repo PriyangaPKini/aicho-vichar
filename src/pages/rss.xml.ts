@@ -1,7 +1,17 @@
+import { statSync } from 'node:fs';
+import { join } from 'node:path';
 import type { APIRoute } from 'astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../constants';
 import { getSortedCollection } from '../lib/content';
+import { postThumbnail } from '../lib/thumbnail';
 import { hostnameFromUrl } from '../lib/url';
+
+const MIME_TYPES: Record<string, string> = {
+  png: 'image/png',
+  jpg: 'image/jpeg',
+  jpeg: 'image/jpeg',
+  svg: 'image/svg+xml',
+};
 
 const escapeXml = (value: string) =>
   value
@@ -47,7 +57,7 @@ const replaceTablesForImport = (html: string, siteUrl: string) =>
   html.replace(/<table>[\s\S]*?<\/table>/g, (table) => {
     if (!table.includes('LLM pipeline')) return table;
 
-    const imageUrl = new URL('/images/blog/evals-before-prompts-building-an-llm-ocr-for-kyc/metrics-table.png', siteUrl).toString();
+    const imageUrl = new URL('/images/blog/2026-05-18-evals-before-prompts-building-an-llm-ocr-for-kyc/metrics-table.png', siteUrl).toString();
     return `<figure class="kg-card kg-image-card kg-card-hascaption"><img src="${imageUrl}" alt="Table comparing third-party and LLM pipeline accuracy, latency, and cost metrics." class="kg-image" loading="lazy" width="1200" height="430"><figcaption><span style="white-space: pre-wrap;">Third-party vs LLM pipeline metrics.</span></figcaption></figure>`;
   });
 
@@ -55,6 +65,26 @@ const absolutizeUrls = (html: string, siteUrl: string) =>
   formatImages(replaceTablesForImport(html, siteUrl).replace(/\b(src|href)="\/(?!\/)([^"]*)"/g, (_, attr: string, path: string) => {
     return `${attr}="${new URL(`/${rssImagePath(path)}`, siteUrl).toString()}"`;
   }));
+
+// RSS enclosures need a byte length, so read it off the file in public/ at build time.
+const buildEnclosure = (thumbnail: string | undefined, siteUrl: string) => {
+  if (!thumbnail) return '';
+
+  const extension = thumbnail.split('.').pop()?.toLowerCase() ?? '';
+  const type = MIME_TYPES[extension];
+  if (!type) return '';
+
+  const path = join(process.cwd(), 'public', thumbnail);
+  let length: number;
+  try {
+    length = statSync(path).size;
+  } catch {
+    return '';
+  }
+
+  const url = new URL(thumbnail, siteUrl).toString();
+  return `<enclosure url="${escapeXml(url)}" length="${length}" type="${type}" />`;
+};
 
 export const GET: APIRoute = async ({ site }) => {
   const posts = await getSortedCollection('blog');
@@ -70,7 +100,8 @@ export const GET: APIRoute = async ({ site }) => {
       ? `<blockquote><p>Originally published on <a href="${escapeXml(post.data.canonicalUrl)}">${escapeXml(hostnameFromUrl(post.data.canonicalUrl))}</a>.</p></blockquote>`
       : '';
     const content = absolutizeUrls(`${post.rendered?.html ?? ''}${canonicalCallout}`, siteUrl);
-    const thumbnailUrl = new URL(`/images/blog/${post.id}/thumbnail.png`, siteUrl).toString();
+    const thumbnail = postThumbnail(post.id);
+    const thumbnailUrl = new URL(thumbnail, siteUrl).toString();
 
     return `
     <item>
@@ -80,8 +111,9 @@ export const GET: APIRoute = async ({ site }) => {
       <guid isPermaLink="false">${escapeXml(post.id)}</guid>
       <dc:creator>${cdata(SITE_TITLE)}</dc:creator>
       <pubDate>${new Date(post.data.date).toUTCString()}</pubDate>
-      ${thumbnailUrl ? `<media:content url="${escapeXml(thumbnailUrl)}" medium="image" />` : ''}
-      ${thumbnailUrl ? `<media:thumbnail url="${escapeXml(thumbnailUrl)}" />` : ''}
+      <media:content url="${escapeXml(thumbnailUrl)}" medium="image" />
+      <media:thumbnail url="${escapeXml(thumbnailUrl)}" />
+      ${buildEnclosure(thumbnail, siteUrl)}
       <content:encoded>${cdata(content)}</content:encoded>
     </item>`;
   }).join('');
