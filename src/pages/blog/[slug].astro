@@ -6,6 +6,7 @@ import PostNavigation from '../../components/blog/PostNavigation.astro';
 import PostShare from '../../components/blog/PostShare.astro';
 import { render } from 'astro:content';
 import { getSortedCollection } from '../../lib/content';
+import { postThumbnail } from '../../lib/thumbnail';
 
 export async function getStaticPaths() {
   const posts = await getSortedCollection('blog');
@@ -23,7 +24,7 @@ export async function getStaticPaths() {
 const { post, prev, next } = Astro.props;
 const { Content } = await render(post);
 const postUrl = new URL(`/blog/${post.id}/`, Astro.site).toString();
-const thumbnail = `/images/blog/${post.id}/thumbnail.png`;
+const thumbnail = postThumbnail(post.id);
 ---
 
 <BaseLayout title={`${post.data.title} — Priyanga P Kini`} description={post.data.description} image={thumbnail}>

@@ -21,7 +21,7 @@ Megasthenes enforces that boundary with a two-part system: the **client** orches
 <div style="text-align: center; margin: 0; padding: 0;">
   <p style="margin: 0 0 0.1rem 0; text-align: center;"><strong>Megasthenes sandbox architecture</strong></p>
   <img
-    src="/images/blog/sandboxing-ai-agents/architecture.svg"
+    src="/images/blog/2026-06-25-sandboxing-megasthenes/architecture.svg"
     alt="Sandbox architecture. The LLM API sits outside the host machine. On the host, your application uses the Megasthenes client. The client talks over HTTP to the Megasthenes worker inside a sandbox implemented as a Linux container with gVisor. Host filesystem, secrets, and network stay outside the sandbox boundary."
     style="display: block; width: 100%; max-width: 900px; margin: 0 auto;"
   />
@@ -42,7 +42,7 @@ We enforce that boundary through four layers.
 3. **Filesystem and process isolation:** [bubblewrap](https://www.linuxfromscratch.org/blfs/view/svn/general/bubblewrap.html) and Linux namespaces ensure tools can see only the worktree they need, not the rest of the host.
 4. **Runtime isolation:** the worker runs inside a Linux container with [gVisor](https://gvisor.dev/), adding another boundary before the host kernel.
 
-![Four stacked isolation layers between an untrusted repo (top) and the host (bottom): L1 application hardening, L2 seccomp, L3 bubblewrap, L4 container with gVisor. A red arrow shows the attack path descending through every layer to reach the host.](/images/blog/sandboxing-ai-agents/isolation-layers.svg)
+![Four stacked isolation layers between an untrusted repo (top) and the host (bottom): L1 application hardening, L2 seccomp, L3 bubblewrap, L4 container with gVisor. A red arrow shows the attack path descending through every layer to reach the host.](/images/blog/2026-06-25-sandboxing-megasthenes/isolation-layers.svg)
 
 Megasthenes combines worker-side input validation with Linux sandboxing primitives such as seccomp and namespaces, then runs the whole thing inside a container with gVisor. A mistake in one layer should not immediately become host access.
 
