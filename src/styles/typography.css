@@ -85,15 +85,16 @@
 .prose p { margin-bottom: 1rem; }
 .prose ul, .prose ol { margin: 1rem 0; padding-left: 1.5rem; }
 .prose li { margin-bottom: 0.4rem; }
+.text-link,
 .prose a {
   color: var(--text);
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-decoration-color: var(--gold);
   text-underline-offset: 3px;
-  border-radius: 2px;
   transition: color var(--transition-duration);
 }
+.text-link:hover,
 .prose a:hover { color: var(--text-muted); }
 .prose blockquote {
   border-left: 3px solid var(--accent);
@@ -155,4 +156,3 @@
 }
 
 
-.link-gold { color: var(--gold); }
