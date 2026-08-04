@@ -46,8 +46,14 @@
 }
 
 
+.intro-large {
+  container-type: inline-size;
+}
+
 .intro-large h1.home-title {
-  font-size: clamp(2rem, 10.5vw, 5rem);
+  /* cqi = 1% of the intro width, which equals the cover image width,
+     so the single-line title stays proportionally inside it at every screen size */
+  font-size: min(8cqi, 4rem);
   white-space: nowrap;
 }
 
