@@ -41,7 +41,7 @@
 
 .post-share-btn--primary {
   background-color: var(--accent);
-  color: var(--bg);
+  color: var(--text);
 }
 
 .post-share-btn--primary:hover {
@@ -51,7 +51,7 @@
 
 .post-share-btn--secondary {
   background-color: transparent;
-  color: var(--accent);
+  color: var(--text);
 }
 
 .post-share-btn--secondary:hover {
