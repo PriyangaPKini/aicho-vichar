@@ -1,0 +1,10 @@
+---
+interface Props {
+  href: string;
+  class?: string;
+}
+
+const { href, class: className = 'text-link' } = Astro.props;
+---
+
+<a href={href} target="_blank" rel="noopener noreferrer" class={className}><slot /></a>

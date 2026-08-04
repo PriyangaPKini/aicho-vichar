@@ -80,6 +80,8 @@
   line-height: 1.8;
 }
 
+.section p + p { margin-top: 1rem; }
+
 
 /* ── Prose (blog/book posts) ── */
 .prose {

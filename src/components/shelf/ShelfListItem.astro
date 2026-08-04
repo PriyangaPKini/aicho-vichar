@@ -2,6 +2,7 @@
 import type { CollectionEntry } from 'astro:content';
 import { formatShortDate } from '../../lib/date';
 import { formatShelfMetadata } from '../../lib/shelf';
+import ExternalLink from '../ui/ExternalLink.astro';
 
 interface Props {
   item: CollectionEntry<'shelf'>;
@@ -21,10 +22,10 @@ const { item } = Astro.props;
       <span class="tag">
         {item.data.type} · <span class="shelf-item-source">{formatShelfMetadata(item.data.creator, item.data.sourceName)}</span>
       </span>
-      <a class="post-item-title" href={item.data.url} target="_blank" rel="noopener noreferrer">
+      <ExternalLink href={item.data.url} class="post-item-title">
         {item.data.title}
         <svg class="external-icon" width="12" height="12"><use href="#icon-external" /></svg>
-      </a>
+      </ExternalLink>
       <p class="shelf-item-subtitle">{item.data.note}</p>
     </div>
   </div>

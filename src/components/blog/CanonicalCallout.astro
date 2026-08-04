@@ -1,5 +1,6 @@
 ---
 import { hostnameFromUrl } from '../../lib/url';
+import ExternalLink from '../ui/ExternalLink.astro';
 
 interface Props {
   url?: string;
@@ -12,8 +13,6 @@ const source = url ? hostnameFromUrl(url) : null;
 {url && (
   <p class="post-canonical">
     Originally published on{' '}
-    <a class="text-link" href={url} target="_blank" rel="noopener noreferrer">
-      {source}
-    </a>.
+    <ExternalLink href={url}>{source}</ExternalLink>.
   </p>
 )}
