@@ -37,7 +37,7 @@ const postUrl = new URL(`/blog/${post.id}/`, Astro.site).toString();
     <CanonicalCallout url={post.data.canonicalUrl} />
   </article>
 
-  <PostShare title={post.data.title} url={postUrl} />
+  <PostShare slug={post.id} />
 
   <PostNavigation prev={prev} next={next} />
 </BaseLayout>
