@@ -6,6 +6,8 @@ tags: ["llm", "sandbox"]
 canonicalUrl: "https://blog.nilenso.com/blog/2026/06/25/sandboxing-ai-agents/"
 ---
 
+![A client talks to a sandboxed worker and agent, while host files and network access are blocked](/images/blog/2026-06-25-sandboxing-megasthenes/hero.png)
+
 Everyone is racing to add LLMs to their systems. At the same time, nobody wants an agent running loose with access to the filesystem or the network. You definitely do not want an agent sending your data back home.
 
 That is the challenge we had to solve while building Megasthenes, our SDK for building code-research agents. Megasthenes lets you point an agent at any GitHub or GitLab repo, ask questions about it in natural language, and get sourced, evidence-backed answers.

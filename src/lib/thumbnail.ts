@@ -4,10 +4,14 @@ import { SITE_IMAGE } from '../constants';
 
 /**
  * A post opts into its own social card by dropping `thumbnail.png` into its
- * image folder — there is no frontmatter to keep in sync. Posts without one
- * fall back to the site-wide image rather than pointing at a missing file.
+ * image folder. If it does not have one, fall back to the first in-post hero
+ * image, then the site-wide image.
  */
 export const postThumbnail = (postId: string) => {
-  const path = `/images/blog/${postId}/thumbnail.png`;
-  return existsSync(join(process.cwd(), 'public', path)) ? path : SITE_IMAGE;
+  const imagePaths = [
+    `/images/blog/${postId}/thumbnail.png`,
+    `/images/blog/${postId}/hero.png`,
+  ];
+
+  return imagePaths.find((path) => existsSync(join(process.cwd(), 'public', path))) ?? SITE_IMAGE;
 };

@@ -6,6 +6,8 @@ tags: ["llm", "evals"]
 canonicalUrl: "https://blog.nilenso.com/blog/2026/05/18/evals-before-prompts-building-an-llm-ocr-for-kyc/"
 ---
 
+![Golden documents flow through a prompt into a scorecard, and failures feed the next prompt](/images/blog/2026-05-18-evals-before-prompts-building-an-llm-ocr-for-kyc/hero.png)
+
 KYC, or Know Your Customer, is how banks, fintechs, and a growing number of businesses verify that a person is who they claim to be. At the heart of it sits a deeply unglamorous task: typing the fields off a scanned PAN card or Aadhaar into a form. Humans are bad at this. It's boring, error-prone, and, at scale, expensive. Can an LLM do it instead?
 
 Around this time last year, I was trying to answer that question for one of our clients. They were paying a third-party service to do this extraction for them, and the bill was steep enough that they wanted to bring the work in-house. The question was whether LLMs could reduce the cost of document verification without sacrificing the accuracy KYC demands.
