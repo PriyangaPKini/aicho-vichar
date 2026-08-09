@@ -6,10 +6,12 @@ import { SITE_DESCRIPTION, SITE_IMAGE, SITE_TITLE } from '../constants';
 import '../styles/global.css';
 
 const {
-  title = SITE_TITLE,
+  title,
   description = SITE_DESCRIPTION,
   image = SITE_IMAGE,
 } = Astro.props;
+// Pages pass their own name only; the site name is appended here so no page repeats it.
+const pageTitle = title ? `${title} — ${SITE_TITLE}` : SITE_TITLE;
 const currentPath = Astro.url.pathname;
 const canonicalUrl = new URL(currentPath, Astro.site).toString();
 const shareImageUrl = new URL(image, Astro.site).toString();
@@ -23,15 +25,15 @@ const shareImageUrl = new URL(image, Astro.site).toString();
   <meta name="description" content={description} />
   <meta property="og:type" content="website" />
   <meta property="og:url" content={canonicalUrl} />
-  <meta property="og:title" content={title} />
+  <meta property="og:title" content={pageTitle} />
   <meta property="og:description" content={description} />
   <meta property="og:image" content={shareImageUrl} />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content={title} />
+  <meta name="twitter:title" content={pageTitle} />
   <meta name="twitter:description" content={description} />
   <meta name="twitter:image" content={shareImageUrl} />
   <link rel="icon" type="image/jpeg" href="/avatar.jpg" />
-  <title>{title}</title>
+  <title>{pageTitle}</title>
   <link rel="sitemap" href="/sitemap-index.xml" />
   <link rel="alternate" type="application/rss+xml" title={`${SITE_TITLE} RSS Feed`} href="/rss.xml" />
 </head>
