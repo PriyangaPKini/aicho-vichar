@@ -27,7 +27,7 @@ const postUrl = new URL(`/blog/${post.id}/`, Astro.site).toString();
 const thumbnail = postThumbnail(post.id);
 ---
 
-<BaseLayout title={`${post.data.title} — Priyanga P Kini`} description={post.data.description} image={thumbnail}>
+<BaseLayout title={`${post.data.title} by Priyanga P Kini`} description={post.data.description} image={thumbnail}>
   <PostHeader
     title={post.data.title}
     date={post.data.date}
