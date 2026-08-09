@@ -1,8 +1,9 @@
 import { statSync } from 'node:fs';
 import { join } from 'node:path';
 import type { APIRoute } from 'astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../constants';
+import { SITE_AUTHOR, SITE_DESCRIPTION, SITE_TITLE } from '../constants';
 import { getSortedCollection } from '../lib/content';
+import { postPreviewDescription } from '../lib/preview';
 import { postThumbnail } from '../lib/thumbnail';
 import { hostnameFromUrl } from '../lib/url';
 
@@ -95,7 +96,7 @@ export const GET: APIRoute = async ({ site }) => {
 
   const items = posts.map((post) => {
     const postUrl = new URL(`/blog/${post.id}/`, siteUrl).toString();
-    const description = post.data.description ?? '';
+    const description = postPreviewDescription(post);
     const canonicalCallout = post.data.canonicalUrl
       ? `<blockquote><p>Originally published on <a href="${escapeXml(post.data.canonicalUrl)}">${escapeXml(hostnameFromUrl(post.data.canonicalUrl))}</a>.</p></blockquote>`
       : '';
@@ -109,7 +110,7 @@ export const GET: APIRoute = async ({ site }) => {
       <description>${cdata(description)}</description>
       <link>${escapeXml(postUrl)}</link>
       <guid isPermaLink="false">${escapeXml(post.id)}</guid>
-      <dc:creator>${cdata(SITE_TITLE)}</dc:creator>
+      <dc:creator>${cdata(SITE_AUTHOR)}</dc:creator>
       <pubDate>${new Date(post.data.date).toUTCString()}</pubDate>
       <media:content url="${escapeXml(thumbnailUrl)}" medium="image" />
       <media:thumbnail url="${escapeXml(thumbnailUrl)}" />
