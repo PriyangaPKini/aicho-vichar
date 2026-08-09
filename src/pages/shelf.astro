@@ -4,15 +4,19 @@ import Search from '../components/search/Search.astro';
 import ShelfListItem from '../components/shelf/ShelfListItem.astro';
 import { getSortedCollection } from '../lib/content';
 import { shelfToSearchItem } from '../lib/search';
+import { previewDescription } from '../lib/preview';
 
 const shelf = await getSortedCollection('shelf');
 const searchItems = shelf.map(shelfToSearchItem);
+
+// The page opens with this line and the preview reads from the same string.
+const intro = 'Books, talks, articles, and podcasts I keep coming back to.';
 ---
 
-<BaseLayout title="Shelf — Priyanga P Kini" description="Books, talks, articles, and podcasts I keep recommending.">
+<BaseLayout title="Shelf" description={previewDescription(intro)}>
   <section class="intro intro-listing">
     <h1 class="page-title">The <span class="title-accent">Shelf</span></h1>
-    <p>Books, talks, articles, and podcasts I keep coming back to.</p>
+    <p>{intro}</p>
   </section>
 
   <Search

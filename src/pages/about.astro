@@ -1,12 +1,16 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ExternalLink from '../components/ui/ExternalLink.astro';
+import { previewDescription } from '../lib/preview';
+
+// The page opens with this line and the preview reads from the same string.
+const intro = 'Hey, I’m Priyanga. I build software for a living, and I write here about what I learn doing it.';
 ---
 
-<BaseLayout title="About — Priyanga P Kini" description="Engineer at nilenso, working on distributed and analytical systems at scale.">
+<BaseLayout title="About" description={previewDescription(intro)}>
   <section class="intro intro-large">
     <h1 class="page-title">About <span class="title-accent">me</span></h1>
-    <p>Hey, I’m Priyanga. I build software for a living, and I write here about what I learn doing it.</p>
+    <p>{intro}</p>
     <p>I’m a member of <ExternalLink href="https://nilenso.com">nilenso</ExternalLink>, a tech cooperative where we’re trying to build a new standard for tech consulting. That turns out to be as much about how you run a company as how you write software. Over the past five years here, I have embedded within client teams, helping take projects from design to implementation.</p>
   </section>
 
