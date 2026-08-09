@@ -1,7 +1,7 @@
 // Site metadata
-export const SITE_TITLE = 'Priyanga P Kini';
+export const SITE_TITLE = 'Priyanga’s journal';
 export const SITE_AUTHOR = 'Priyanga P Kini';
-export const SITE_DESCRIPTION = "an engineer's journal";
+export const SITE_DESCRIPTION = 'An engineer’s reflections on work and life';
 // Shown as the social card for any page without one of its own.
 export const SITE_IMAGE = '/gallery/holiday-in-munnar.jpeg';
 

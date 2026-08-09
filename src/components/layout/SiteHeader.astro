@@ -1,7 +1,11 @@
+---
+import { SITE_TITLE } from '../../constants';
+---
+
 <header class="site-header">
   <div class="site-header-inner">
-    <a href="/" class="site-header-brand" aria-label="Priyanga P Kini home">
-      Priyanga P Kini
+    <a href="/" class="site-header-brand" aria-label={`${SITE_TITLE} home`}>
+      {SITE_TITLE}
     </a>
     <nav class="site-header-nav" aria-label="Primary navigation">
       <a href="/about" class="site-header-link">About</a>

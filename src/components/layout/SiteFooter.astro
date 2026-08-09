@@ -1,6 +1,6 @@
 ---
 import IconLink from "../ui/IconLink.astro";
-import { SOCIAL_ITEMS } from "../../constants";
+import { SITE_AUTHOR, SOCIAL_ITEMS } from "../../constants";
 
 const currentYear = new Date().getFullYear();
 ---
@@ -8,7 +8,7 @@ const currentYear = new Date().getFullYear();
 <footer class="site-footer">
   <div class="site-footer-inner">
     <p class="site-footer-license">
-      © {currentYear} Priyanga P Kini
+      © {currentYear} {SITE_AUTHOR}
     </p>
     <div class="site-footer-socials">
       {SOCIAL_ITEMS.map((item) => (
