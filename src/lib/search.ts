@@ -15,12 +15,12 @@ export const markdownToSearchText = (markdown = '') =>
     .replace(/[#*`>\[\]()!_~]/g, '')
     .trim();
 
-export const blogToSearchItem = (post: CollectionEntry<'blog'>): SearchItem => ({
+export const postToSearchItem = (post: CollectionEntry<'posts'>): SearchItem => ({
   title: post.data.title,
   body: markdownToSearchText(post.body),
   tags: post.data.tags || [],
   date: post.data.date,
-  href: `/blog/${post.id}`,
+  href: `/posts/${post.id}`,
   external: false,
 });
 

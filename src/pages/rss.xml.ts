@@ -25,7 +25,7 @@ const escapeXml = (value: string) =>
 const cdata = (value: string) => `<![CDATA[ ${value.replaceAll(']]>', ']]]]><![CDATA[>')} ]]>`;
 
 const rssImagePath = (path: string) => {
-  if (path.startsWith('images/blog/') && path.endsWith('.svg')) {
+  if (path.startsWith('images/posts/') && path.endsWith('.svg')) {
     return path.replace(/\.svg$/, '.png');
   }
 
@@ -58,7 +58,7 @@ const replaceTablesForImport = (html: string, siteUrl: string) =>
   html.replace(/<table>[\s\S]*?<\/table>/g, (table) => {
     if (!table.includes('LLM pipeline')) return table;
 
-    const imageUrl = new URL('/images/blog/2026-05-18-evals-before-prompts-building-an-llm-ocr-for-kyc/metrics-table.png', siteUrl).toString();
+    const imageUrl = new URL('/images/posts/2026-05-18-evals-before-prompts-building-an-llm-ocr-for-kyc/metrics-table.png', siteUrl).toString();
     return `<figure class="kg-card kg-image-card kg-card-hascaption"><img src="${imageUrl}" alt="Table comparing third-party and LLM pipeline accuracy, latency, and cost metrics." class="kg-image" loading="lazy" width="1200" height="430"><figcaption><span style="white-space: pre-wrap;">Third-party vs LLM pipeline metrics.</span></figcaption></figure>`;
   });
 
@@ -88,14 +88,14 @@ const buildEnclosure = (thumbnail: string | undefined, siteUrl: string) => {
 };
 
 export const GET: APIRoute = async ({ site }) => {
-  const posts = await getSortedCollection('blog');
+  const posts = await getSortedCollection('posts');
   const siteUrl = site?.toString() ?? 'https://priyangapkini.com/';
   const rssUrl = new URL('/rss.xml', siteUrl).toString();
   const avatarUrl = new URL('/avatar.jpg', siteUrl).toString();
   const latestPostDate = posts[0]?.data.date;
 
   const items = posts.map((post) => {
-    const postUrl = new URL(`/blog/${post.id}/`, siteUrl).toString();
+    const postUrl = new URL(`/posts/${post.id}/`, siteUrl).toString();
     const description = postPreviewDescription(post);
     const canonicalCallout = post.data.canonicalUrl
       ? `<blockquote><p>Originally published on <a href="${escapeXml(post.data.canonicalUrl)}">${escapeXml(hostnameFromUrl(post.data.canonicalUrl))}</a>.</p></blockquote>`

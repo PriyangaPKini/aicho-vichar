@@ -1,10 +1,10 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import BlogListItem from '../components/blog/BlogListItem.astro';
-import { HOME_LATEST_BLOG_LIMIT } from '../constants';
-import { getLatestBlogPosts } from '../lib/content';
+import PostListItem from '../components/post/PostListItem.astro';
+import { HOME_LATEST_POST_LIMIT } from '../constants';
+import { getLatestPosts } from '../lib/content';
 
-const posts = await getLatestBlogPosts(HOME_LATEST_BLOG_LIMIT);
+const posts = await getLatestPosts(HOME_LATEST_POST_LIMIT);
 ---
 
 <BaseLayout>
@@ -20,14 +20,14 @@ const posts = await getLatestBlogPosts(HOME_LATEST_BLOG_LIMIT);
 
   {posts.length > 0 && (
     <section class="section">
-      <h2 class="section-title">Latest Blogs</h2>
+      <h2 class="section-title">Recent writing</h2>
       <ul class="post-list">
         {posts.map((post, i) => (
-          <BlogListItem post={post} index={i} />
+          <PostListItem post={post} index={i} />
         ))}
       </ul>
       <p class="section-more">
-        <a href="/blog">View all &rarr;</a>
+        <a href="/posts">Full archive &rarr;</a>
       </p>
     </section>
   )}
