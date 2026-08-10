@@ -16,11 +16,17 @@ const posts = await getSortedCollection('posts');
   {posts.length === 0 ? (
     <p style="color: var(--text-muted);">No posts yet. Stay tuned.</p>
   ) : (
+    <>
+    <h2 class="section-title">
+      All writing
+      <span class="section-count">{posts.length} {posts.length === 1 ? 'piece' : 'pieces'}</span>
+    </h2>
     <ul class="post-list">
       {posts.map((post, i) => (
         <PostListItem post={post} index={i} variant="detailed" />
       ))}
     </ul>
+    </>
   )}
 </BaseLayout>
 
