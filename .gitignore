@@ -27,8 +27,9 @@ pnpm-debug.log*
 # vscode setting folder
 .vscode/
 
-# claude
-.claude/
+# claude — local settings stay out, shared skills are versioned
+.claude/*
+!.claude/skills/
 .pi-subagents/
 
 # personal notes
