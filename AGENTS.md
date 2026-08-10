@@ -26,20 +26,20 @@ For cross-project conventions, see `~/.claude/rules/` (`contributing.md`, `codin
 src/
 ├── components/
 │   ├── auth/          # SignInModal, SignUpModal
-│   ├── blog/          # BlogListItem, PostHeader, PostNavigation, TableOfContents, …
+│   ├── post/          # PostListItem, PostHeader, PostNavigation, TableOfContents, …
 │   ├── comments/      # threaded comments UI
 │   ├── layout/        # SiteHeader, SiteFooter
 │   ├── search/        # reusable Search component + client behavior
 │   ├── shelf/         # ShelfListItem
 │   └── ui/            # Icons, IconLink
 ├── content/
-│   ├── blog/          # markdown posts; one .md per post
+│   ├── posts/         # markdown posts; one .md per post
 │   └── shelf.yml      # shelf recommendations
 ├── content.config.ts  # zod schemas for content collections
 ├── layouts/           # BaseLayout
 ├── lib/               # Firebase client + content/date/search/url helpers
 ├── pages/
-│   ├── blog/
+│   ├── posts/
 │   │   ├── index.astro
 │   │   └── [slug].astro
 │   ├── index.astro
@@ -47,14 +47,14 @@ src/
 ├── styles/            # CSS modules imported by global.css
 ├── constants.ts       # site-wide constants
 └── utils.ts
-public/                # static assets (avatar, gallery, blog images)
+public/                # static assets (avatar, gallery, post images)
 scripts/
-└── sync-notion.mjs    # mirror Notion DB → src/content/blog
+└── sync-notion.mjs    # mirror Notion DB → src/content/posts
 ```
 
 ## Content
 
-Blog posts live in `src/content/blog/*.md` and must satisfy the schema in `src/content.config.ts`:
+Posts live in `src/content/posts/*.md` and must satisfy the schema in `src/content.config.ts`:
 
 | Field | Required | Notes |
 |---|---|---|
@@ -68,7 +68,7 @@ Blog posts live in `src/content/blog/*.md` and must satisfy the schema in `src/c
 
 Shelf items live in `src/content/shelf.yml` and must satisfy the `shelf` schema in `src/content.config.ts`. Add one YAML entry per recommendation; the `note` field is used in the list and search text.
 
-When adding fields, update the schema **and** any consuming components (`BlogListItem.astro`, `ShelfListItem.astro`, `blog/[slug].astro`, `scripts/sync-notion.mjs`) in the same PR.
+When adding fields, update the schema **and** any consuming components (`PostListItem.astro`, `ShelfListItem.astro`, `posts/[slug].astro`, `scripts/sync-notion.mjs`) in the same PR.
 
 ## Commands
 
@@ -77,7 +77,7 @@ npm install          # install deps (Node ≥ 22.12.0)
 npm run dev          # local dev at http://localhost:4321
 npm run build        # static build to ./dist
 npm run preview      # serve ./dist locally
-npm run sync:notion  # pull blog content from Notion into src/content/blog
+npm run sync:notion  # pull post content from Notion into src/content/posts
 npm run astro …      # raw Astro CLI (e.g. `astro check`)
 ```
 
@@ -98,7 +98,7 @@ npm run astro …      # raw Astro CLI (e.g. `astro check`)
 ## Content sync (Notion)
 
 - Source of truth: a Notion database — each page with `Status = Done` becomes one markdown post.
-- Script: `scripts/sync-notion.mjs`. Maps Notion properties → frontmatter (see `src/content.config.ts`), converts the body to markdown, and downloads embedded images to `public/blog-images/<slug>/` (Notion file URLs expire).
+- Script: `scripts/sync-notion.mjs`. Maps Notion properties → frontmatter (see `src/content.config.ts`), converts the body to markdown, and downloads embedded images to `public/images/posts/<slug>/` (Notion file URLs expire).
 - Notion property → frontmatter mapping:
 
   | Notion property | Frontmatter field |
@@ -119,10 +119,10 @@ npm run astro …      # raw Astro CLI (e.g. `astro check`)
 
 ## Cross-posts and canonical attribution
 
-- Posts that originated elsewhere (e.g. the nilenso blog) still get a real page on this site — they are not redirected. The full body lives in `src/content/blog/<slug>.md` and the post page renders normally.
+- Posts that originated elsewhere (e.g. the nilenso blog) still get a real page on this site — they are not redirected. The full body lives in `src/content/posts/<slug>.md` and the post page renders normally.
 - Setting `canonicalUrl` triggers an "Originally published on …" callout at the end of the article. The source label is derived from the URL hostname (`new URL(canonicalUrl).hostname.replace(/^www\./, '')`), so any publisher works.
-- When cross-posting, self-host the assets under `public/images/blog/<post-id>/` rather than hot-linking from the source. `<post-id>` is the markdown filename without its extension (e.g. `2026-06-25-sandboxing-megasthenes`) — one folder per post holding every image it uses.
-- Each post's social card lives in that same folder as `thumbnail.png`. The path is derived from the post id, not from frontmatter, so nothing has to be configured per post: `blog/[slug].astro` uses it for `og:image` / `twitter:image`, and `rss.xml.ts` for `<media:content>`, `<media:thumbnail>`, and `<enclosure>`. Keep the editable `thumbnail.svg` source beside it.
+- When cross-posting, self-host the assets under `public/images/posts/<post-id>/` rather than hot-linking from the source. `<post-id>` is the markdown filename without its extension (e.g. `2026-06-25-sandboxing-megasthenes`) — one folder per post holding every image it uses.
+- Each post's social card lives in that same folder as `thumbnail.png`. The path is derived from the post id, not from frontmatter, so nothing has to be configured per post: `posts/[slug].astro` uses it for `og:image` / `twitter:image`, and `rss.xml.ts` for `<media:content>`, `<media:thumbnail>`, and `<enclosure>`. Keep the editable `thumbnail.svg` source beside it.
 
 ## Comments & auth
 
@@ -149,4 +149,4 @@ npm run astro …      # raw Astro CLI (e.g. `astro check`)
 ## Things to watch
 
 - The `site:` URL in `astro.config.mjs` (`https://aicho-vichar.netlify.app`) drives the sitemap. Update it if a custom domain goes live.
-- Cmd+K search is built at runtime against `fuse.js` over the blog collection. Keep `description` populated for better hit quality.
+- Cmd+K search is built at runtime against `fuse.js` over the posts collection. Keep `description` populated for better hit quality.

@@ -21,7 +21,7 @@ npm install
 npm run dev          # start dev server at localhost:4321
 npm run build        # build to ./dist/
 npm run preview      # preview the production build
-npm run sync:notion  # pull blog content from Notion into src/content/blog
+npm run sync:notion  # pull post content from Notion into src/content/posts
 ```
 
 Copy `.env.example` to `.env` and fill in the Firebase keys for sign-in/comments to work locally. The `NOTION_*` keys are only required when running the sync script.
@@ -32,20 +32,20 @@ Copy `.env.example` to `.env` and fill in the Firebase keys for sign-in/comments
 src/
 ├── components/
 │   ├── auth/          # sign-in/sign-up modals
-│   ├── blog/          # blog list item, post header/nav, TOC, canonical callout
+│   ├── post/          # post list item, post header/nav, TOC, canonical callout
 │   ├── comments/      # threaded comments UI
 │   ├── layout/        # site header/footer
 │   ├── search/        # reusable Fuse search component + client behavior
 │   ├── shelf/         # shelf list item
 │   └── ui/            # shared icons/icon links
 ├── content/
-│   ├── blog/          # markdown blog posts
+│   ├── posts/         # markdown posts
 │   └── shelf.yml      # shelf recommendations
 ├── content.config.ts  # zod schemas for content collections
 ├── layouts/           # BaseLayout
 ├── lib/               # content/date/search/url helpers + Firebase client
 ├── pages/
-│   ├── blog/
+│   ├── posts/
 │   │   ├── index.astro
 │   │   └── [slug].astro
 │   ├── index.astro
@@ -53,9 +53,9 @@ src/
 ├── styles/            # split CSS modules imported by global.css
 ├── constants.ts
 └── utils.ts
-public/                # static assets (avatar, gallery, blog images)
+public/                # static assets (avatar, gallery, post images)
 scripts/
-└── sync-notion.mjs    # mirror Notion → src/content/blog
+└── sync-notion.mjs    # mirror Notion → src/content/posts
 ```
 
 ## Notes
