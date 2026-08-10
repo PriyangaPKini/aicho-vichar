@@ -19,36 +19,21 @@
   color: var(--text-muted);
 }
 
+/* Matches the .text-link / .prose a treatment so section links read the same
+   as links inside a post. */
 .section-title a {
   font-family: var(--font-body);
   font-size: 0.8rem;
-  color: var(--text);
-  text-decoration: none;
   font-weight: 500;
-  padding: 0.15rem 0.4rem;
-  border-radius: var(--border-radius-sm);
-  transition: background-color var(--transition-duration);
-}
-
-.section-title a:hover { background: var(--accent-light-bg); }
-
-.section-more {
-  margin-top: 1rem;
-  text-align: right;
-}
-
-.section-more a {
-  display: inline-flex;
-  font-size: 0.85rem;
   color: var(--text);
-  text-decoration: none;
-  font-weight: 500;
-  padding: 0.25rem 0.55rem;
-  border-radius: var(--border-radius-sm);
-  transition: background-color var(--transition-duration);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--gold);
+  text-underline-offset: 3px;
+  transition: color var(--transition-duration);
 }
 
-.section-more a:hover { background: var(--accent-light-bg); }
+.section-title a:hover { color: var(--text-muted); }
 
 /* ── Post List ── */
 .post-list { list-style: none; }
@@ -176,17 +161,19 @@
   text-align: right;
 }
 
+/* Matches the .text-link / .prose a treatment, as .section-title a does. */
 .nav-prev a, .nav-next a {
   display: inline-flex;
   font-size: 0.85rem;
-  color: var(--text);
-  text-decoration: none;
   font-weight: 500;
-  padding: 0.25rem 0.55rem;
-  border-radius: var(--border-radius-sm);
-  transition: background-color var(--transition-duration);
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--gold);
+  text-underline-offset: 3px;
+  transition: color var(--transition-duration);
 }
 
 .nav-prev a:hover, .nav-next a:hover {
-  background: var(--accent-light-bg);
+  color: var(--text-muted);
 }
