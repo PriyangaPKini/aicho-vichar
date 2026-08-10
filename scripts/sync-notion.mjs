@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Sync blog posts from a Notion database into src/content/blog.
+ * Sync posts from a Notion database into src/content/posts.
  *
  * Pulls every page where Status = "Done", converts the page body to markdown,
  * downloads embedded images locally (Notion file URLs expire), and writes
@@ -23,9 +23,9 @@ import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
-const POSTS_DIR = join(ROOT, 'src/content/blog');
-const IMAGES_DIR = join(ROOT, 'public/blog-images');
-const IMAGES_PUBLIC_PREFIX = '/blog-images';
+const POSTS_DIR = join(ROOT, 'src/content/posts');
+const IMAGES_DIR = join(ROOT, 'public/images/posts');
+const IMAGES_PUBLIC_PREFIX = '/images/posts';
 
 await loadDotEnv(join(ROOT, '.env'));
 

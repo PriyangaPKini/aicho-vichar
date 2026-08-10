@@ -44,4 +44,4 @@ jobs:
           body: |
             Automated sync from Notion (run [#${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})).
 
-            Review the diff under `src/content/blog/` and `public/blog-images/` before merging.
+            Review the diff under `src/content/posts/` and `public/images/posts/` before merging.
