@@ -29,6 +29,7 @@ pnpm-debug.log*
 
 # claude
 .claude/
+.pi-subagents/
 
 # personal notes
 TODO.md
