@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lora:wght@400..700&family=Inter:wght@400;500;600&display=swap');
 
 :root {
   --bg: #faf6ec;
@@ -11,7 +11,7 @@
   --maroon: #8b2c2c;
   --border: #d8ccb4;
   --card-bg: #f5efe1;
-  --font-heading: 'Fraunces', 'Lora', Georgia, serif;
+  --font-heading: 'Lora', Georgia, serif;
   --font-body: 'Inter', sans-serif;
   --navbar-height: 60px;
   --accent-light-bg: rgba(212, 148, 35, 0.1);
