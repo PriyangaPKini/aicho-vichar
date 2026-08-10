@@ -2,8 +2,8 @@
 import type { CollectionEntry } from 'astro:content';
 
 interface Props {
-  prev: CollectionEntry<'blog'> | null;
-  next: CollectionEntry<'blog'> | null;
+  prev: CollectionEntry<'posts'> | null;
+  next: CollectionEntry<'posts'> | null;
 }
 
 const { prev, next } = Astro.props;
@@ -12,14 +12,14 @@ const { prev, next } = Astro.props;
 <nav class="post-navigation">
   <div class="nav-prev">
     {prev ? (
-      <a href={`/blog/${prev.id}`}>← {prev.data.title}</a>
+      <a href={`/posts/${prev.id}`}>← {prev.data.title}</a>
     ) : (
       <span></span>
     )}
   </div>
   <div class="nav-next">
     {next ? (
-      <a href={`/blog/${next.id}`}>{next.data.title} →</a>
+      <a href={`/posts/${next.id}`}>{next.data.title} →</a>
     ) : (
       <span></span>
     )}

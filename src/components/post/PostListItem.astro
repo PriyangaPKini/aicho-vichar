@@ -4,7 +4,7 @@ import { POST_COLORS } from '../../constants';
 import { formatShortDate } from '../../lib/date';
 
 interface Props {
-  post: CollectionEntry<'blog'>;
+  post: CollectionEntry<'posts'>;
   index: number;
   variant?: "compact" | "detailed";
 }
@@ -28,14 +28,14 @@ const color = POST_COLORS[index % POST_COLORS.length];
             {post.data.tags.join(' · ')}
           </span>
         )}
-        <a class="post-item-title" href={`/blog/${post.id}`}>
+        <a class="post-item-title" href={`/posts/${post.id}`}>
           {post.data.featured && <svg class="featured-icon" width="12" height="12"><use href="#icon-star" /></svg>}
           {post.data.title}
         </a>
         {post.data.description && <p class="shelf-item-subtitle">{post.data.description}</p>}
       </div>
     ) : (
-      <a class="post-item-title" href={`/blog/${post.id}`}>
+      <a class="post-item-title" href={`/posts/${post.id}`}>
         {post.data.featured && <svg class="featured-icon" width="12" height="12"><use href="#icon-star" /></svg>}
         {post.data.title}
       </a>

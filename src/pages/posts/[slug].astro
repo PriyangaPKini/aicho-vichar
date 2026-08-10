@@ -1,16 +1,16 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import CanonicalCallout from '../../components/blog/CanonicalCallout.astro';
-import PostHeader from '../../components/blog/PostHeader.astro';
-import PostNavigation from '../../components/blog/PostNavigation.astro';
-import PostShare from '../../components/blog/PostShare.astro';
+import CanonicalCallout from '../../components/post/CanonicalCallout.astro';
+import PostHeader from '../../components/post/PostHeader.astro';
+import PostNavigation from '../../components/post/PostNavigation.astro';
+import PostShare from '../../components/post/PostShare.astro';
 import { render } from 'astro:content';
 import { getSortedCollection } from '../../lib/content';
 import { postPreviewDescription } from '../../lib/preview';
 import { postThumbnail } from '../../lib/thumbnail';
 
 export async function getStaticPaths() {
-  const posts = await getSortedCollection('blog');
+  const posts = await getSortedCollection('posts');
 
   return posts.map((post, index) => ({
     params: { slug: post.id },
@@ -24,7 +24,7 @@ export async function getStaticPaths() {
 
 const { post, prev, next } = Astro.props;
 const { Content } = await render(post);
-const postUrl = new URL(`/blog/${post.id}/`, Astro.site).toString();
+const postUrl = new URL(`/posts/${post.id}/`, Astro.site).toString();
 const thumbnail = postThumbnail(post.id);
 const description = postPreviewDescription(post);
 ---
@@ -35,7 +35,7 @@ const description = postPreviewDescription(post);
     date={post.data.date}
   />
 
-  <article class="prose" data-blog-content>
+  <article class="prose" data-post-content>
     <Content />
     <CanonicalCallout url={post.data.canonicalUrl} />
   </article>

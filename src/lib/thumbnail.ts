@@ -9,8 +9,8 @@ import { SITE_IMAGE } from '../constants';
  */
 export const postThumbnail = (postId: string) => {
   const imagePaths = [
-    `/images/blog/${postId}/thumbnail.png`,
-    `/images/blog/${postId}/hero.png`,
+    `/images/posts/${postId}/thumbnail.png`,
+    `/images/posts/${postId}/hero.png`,
   ];
 
   return imagePaths.find((path) => existsSync(join(process.cwd(), 'public', path))) ?? SITE_IMAGE;

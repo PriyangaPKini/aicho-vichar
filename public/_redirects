@@ -1,0 +1,4 @@
+# The /blog routes moved to /posts. Existing links and feed items still
+# point at the old paths, so keep them resolving permanently.
+/blog           /posts           301
+/blog/*         /posts/:splat    301

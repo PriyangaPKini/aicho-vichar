@@ -6,7 +6,7 @@ tags: ["temporal", "exceptions"]
 canonicalUrl: "https://blog.nilenso.com/blog/2026/04/30/business-errors-are-outcomes-not-exceptions/"
 ---
 
-![A document validation flow where throwing exceptions causes retries, while returning outcomes is handled normally](/images/blog/2026-04-30-temporal-anti-pattern-dont-treat-expected-failures-as-exceptions/hero.png)
+![A document validation flow where throwing exceptions causes retries, while returning outcomes is handled normally](/images/posts/2026-04-30-temporal-anti-pattern-dont-treat-expected-failures-as-exceptions/hero.png)
 
 We recently worked on partner onboarding for a logistics platform. When a new delivery partner signs up, they upload identity documents. The system runs OCR on each document, validates the extracted fields, and marks the document as verified or rejected. A partner can't start taking deliveries until this is completed.
 
@@ -14,7 +14,7 @@ The previous flow took 3-4 days. The goal was same-day onboarding. The verificat
 
 In the Temporal framework, the individual tasks are modelled as [Activities](https://docs.temporal.io/activities), and the orchestration logic as the [Workflow](https://docs.temporal.io/workflows).
 
-![Document verification workflow](/images/blog/2026-04-30-temporal-anti-pattern-dont-treat-expected-failures-as-exceptions/document-verification-workflow.svg)
+![Document verification workflow](/images/posts/2026-04-30-temporal-anti-pattern-dont-treat-expected-failures-as-exceptions/document-verification-workflow.svg)
 
 Temporal uses exceptions as its primary mechanism for handling failures, so we initially modelled our validation Activity the same way:
 

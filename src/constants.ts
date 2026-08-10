@@ -12,7 +12,7 @@ export const SOCIAL_ITEMS = [
 ];
 
 // Home page
-export const HOME_LATEST_BLOG_LIMIT = 3;
+export const HOME_LATEST_POST_LIMIT = 3;
 
 // Post colors
 export const POST_COLORS = ['var(--gold)', '#1a1a1a'];

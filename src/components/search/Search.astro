@@ -1,6 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
-import { blogToSearchItem, type SearchItem } from '../../lib/search';
+import { postToSearchItem, type SearchItem } from '../../lib/search';
 
 interface Props {
   items?: SearchItem[];
@@ -11,15 +11,15 @@ interface Props {
 
 const {
   items,
-  label = 'Blogs',
-  placeholder = 'Search blogs...',
-  triggerText = 'Search blogs…',
+  label = 'Posts',
+  placeholder = 'Search posts...',
+  triggerText = 'Search posts…',
 } = Astro.props;
 
-const posts = items ? [] : (await getCollection('blog'))
+const posts = items ? [] : (await getCollection('posts'))
   .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
 
-const searchData = items ?? posts.map(blogToSearchItem);
+const searchData = items ?? posts.map(postToSearchItem);
 ---
 
 <div class="search-root" data-search-root>

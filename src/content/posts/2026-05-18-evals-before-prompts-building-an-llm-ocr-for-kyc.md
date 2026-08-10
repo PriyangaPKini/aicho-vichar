@@ -6,7 +6,7 @@ tags: ["llm", "evals"]
 canonicalUrl: "https://blog.nilenso.com/blog/2026/05/18/evals-before-prompts-building-an-llm-ocr-for-kyc/"
 ---
 
-![Golden documents flow through a prompt into a scorecard, and failures feed the next prompt](/images/blog/2026-05-18-evals-before-prompts-building-an-llm-ocr-for-kyc/hero.png)
+![Golden documents flow through a prompt into a scorecard, and failures feed the next prompt](/images/posts/2026-05-18-evals-before-prompts-building-an-llm-ocr-for-kyc/hero.png)
 
 KYC, or Know Your Customer, is how banks, fintechs, and a growing number of businesses verify that a person is who they claim to be. At the heart of it sits a deeply unglamorous task: typing the fields off a scanned PAN card or Aadhaar into a form. Humans are bad at this. It's boring, error-prone, and, at scale, expensive. Can an LLM do it instead?
 
@@ -22,7 +22,7 @@ Starting here mattered because it gave me one number I could defend to the clien
 
 There were four document types: PAN (India's Income Tax ID), Aadhaar (Indian National ID card), DL (Indian Driver's License), and RC (Indian Vehicle Registration Certificate). Each has its own layout and failure modes, and a model can't transfer what it learned from one to another. A single blended accuracy number across all four would have buried the real problem: an LLM that reads one document type perfectly might fail on another. So I split the golden dataset into four slices, one per document type, and treated each as a separate problem with its own baseline and room to iterate.
 
-![The golden dataset split into four slices, one per document type: PAN, Aadhaar, DL, and RC.](/images/blog/2026-05-18-evals-before-prompts-building-an-llm-ocr-for-kyc/dataset_slices.svg)
+![The golden dataset split into four slices, one per document type: PAN, Aadhaar, DL, and RC.](/images/posts/2026-05-18-evals-before-prompts-building-an-llm-ocr-for-kyc/dataset_slices.svg)
 
 I included a mix of inputs: flatbed scans and phone photos, glare and skew, the long tail of state-wise DL and RC layouts, and documents with regional-language text alongside English. This kept each evaluation tractable while still reflecting real-world data.
 
@@ -41,7 +41,7 @@ With the rubric in hand, I moved to human review. For identity documents, no aut
 
 With the dataset, the rubric, and a reviewer in place, I had an eval loop. Run a prompt against all 50 documents in a slice, collect the extractions, score each one against the rubric, and walk away with two things: a number for that slice and a list of why each failure happened. The list, not the number, was what drove the next prompt change. Then run it again.
 
-![The eval loop: prompt → run on slice (50 documents) → score against rubric (reviewer + checks) → number and failure list → revise prompt and repeat.](/images/blog/2026-05-18-evals-before-prompts-building-an-llm-ocr-for-kyc/eval_loop.svg)
+![The eval loop: prompt → run on slice (50 documents) → score against rubric (reviewer + checks) → number and failure list → revise prompt and repeat.](/images/posts/2026-05-18-evals-before-prompts-building-an-llm-ocr-for-kyc/eval_loop.svg)
 
 ## Iterating on the Prompt
 

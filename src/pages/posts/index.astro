@@ -1,24 +1,24 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import BlogListItem from '../../components/blog/BlogListItem.astro';
+import PostListItem from '../../components/post/PostListItem.astro';
 import Search from '../../components/search/Search.astro';
 import { getSortedCollection } from '../../lib/content';
 
-const posts = await getSortedCollection('blog');
+const posts = await getSortedCollection('posts');
 ---
 
-<BaseLayout title="All Blogs">
+<BaseLayout title="The archive">
   <section class="intro intro-listing">
-    <h1 class="page-title">All <span class="title-accent">Blogs</span></h1>
+    <h1 class="page-title">The <span class="title-accent">archive.</span></h1>
   </section>
 
   <Search />
   {posts.length === 0 ? (
-    <p style="color: var(--text-muted);">No blogs yet. Stay tuned.</p>
+    <p style="color: var(--text-muted);">No posts yet. Stay tuned.</p>
   ) : (
     <ul class="post-list">
       {posts.map((post, i) => (
-        <BlogListItem post={post} index={i} variant="detailed" />
+        <PostListItem post={post} index={i} variant="detailed" />
       ))}
     </ul>
   )}
