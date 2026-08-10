@@ -73,9 +73,8 @@
 
 .intro p + p { margin-top: 0.75rem; }
 
-/* Body copy inside a section reads at the same size as the intro above it.
-   .section-more is excluded: it is a link chip with its own scale. */
-.section p:not(.section-more) {
+/* Body copy inside a section reads at the same size as the intro above it. */
+.section p {
   font-size: 1.05rem;
   line-height: 1.8;
 }
