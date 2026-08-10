@@ -126,8 +126,9 @@
   font-size: 0.85em;
 }
 .prose pre {
-  background: var(--text);
-  color: var(--bg);
+  background: var(--card-bg);
+  color: var(--text);
+  border: 1px solid var(--border);
   padding: 1rem;
   border-radius: var(--border-radius-lg);
   overflow-x: auto;
