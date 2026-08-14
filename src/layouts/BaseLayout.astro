@@ -15,6 +15,7 @@ const pageTitle = title ? `${title} — ${SITE_TITLE}` : SITE_TITLE;
 const currentPath = Astro.url.pathname;
 const canonicalUrl = new URL(currentPath, Astro.site).toString();
 const shareImageUrl = new URL(image, Astro.site).toString();
+const plausibleScriptUrl = import.meta.env.PUBLIC_PLAUSIBLE_SCRIPT_URL;
 ---
 
 <!DOCTYPE html>
@@ -36,6 +37,21 @@ const shareImageUrl = new URL(image, Astro.site).toString();
   <title>{pageTitle}</title>
   <link rel="sitemap" href="/sitemap-index.xml" />
   <link rel="alternate" type="application/rss+xml" title={`${SITE_TITLE} RSS Feed`} href="/rss.xml" />
+  {plausibleScriptUrl && (
+    <>
+      <!-- Privacy-friendly analytics by Plausible -->
+      <script async src={plausibleScriptUrl}></script>
+      <script is:inline>
+        window.plausible = window.plausible || function () {
+          (plausible.q = plausible.q || []).push(arguments);
+        };
+        plausible.init = plausible.init || function (options) {
+          plausible.o = options || {};
+        };
+        plausible.init();
+      </script>
+    </>
+  )}
 </head>
 <body>
   <Icons />
